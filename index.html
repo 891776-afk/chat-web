@@ -17,6 +17,134 @@
       color: #e2e2e2;
     }
 
+    /* ── Auth Screen ── */
+    #authScreen {
+      position: fixed;
+      inset: 0;
+      background: #1a1a2e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 30;
+    }
+
+    #authBox {
+      background: #16213e;
+      border-radius: 16px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 340px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    #authBox h2 {
+      color: #e94560;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    #authBox p {
+      font-size: 13px;
+      color: #aaa;
+      text-align: center;
+    }
+
+    .warning-note {
+      font-size: 12px;
+      color: #ffd980;
+      background: #7a4f00;
+      border-radius: 8px;
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+
+    #authBox input {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      background: #0f3460;
+      color: #e2e2e2;
+      font-size: 15px;
+      outline: none;
+      width: 100%;
+    }
+
+    #authBox input::placeholder { color: #666; }
+
+    #authBox button.primary {
+      background: #e94560;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    #authBox button.secondary {
+      background: transparent;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 10px;
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    #authBox button.secondary:hover { border-color: #e94560; color: #e94560; }
+
+    #authError {
+      color: #e94560;
+      font-size: 13px;
+      text-align: center;
+      min-height: 18px;
+    }
+
+    /* ── User list (login screen) ── */
+    #userList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .user-btn {
+      background: #0f3460;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #e2e2e2;
+      font-size: 15px;
+      cursor: pointer;
+      text-align: left;
+      transition: border 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-btn:hover { border-color: #e94560; }
+    .user-btn.selected { border-color: #e94560; background: #1a1a2e; }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #e94560;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
     /* ── Sidebar ── */
     #sidebar {
       width: 260px;
@@ -27,12 +155,42 @@
       border-right: 2px solid #e94560;
     }
 
-    #sidebar h2 {
-      padding: 18px 16px 10px;
+    #sidebarHeader {
+      padding: 14px 16px;
+      border-bottom: 1px solid #1a1a2e;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    #sidebarHeader h2 {
       font-size: 18px;
       font-weight: 700;
       color: #e94560;
+    }
+
+    #logoutBtn {
+      background: transparent;
+      border: 1px solid #444;
+      border-radius: 8px;
+      color: #aaa;
+      font-size: 12px;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
+    #logoutBtn:hover { border-color: #e94560; color: #e94560; }
+
+    #currentUserLabel {
+      padding: 8px 16px 12px;
+      font-size: 12px;
+      color: #aaa;
       border-bottom: 1px solid #1a1a2e;
+    }
+
+    #currentUserLabel span {
+      color: #e2e2e2;
+      font-weight: 600;
     }
 
     #roomList {
@@ -60,8 +218,6 @@
       font-weight: 600;
       color: #e94560;
     }
-
-    .room-item .room-icon { font-size: 16px; }
 
     #createRoomArea {
       padding: 12px;
@@ -94,7 +250,7 @@
       font-weight: 700;
     }
 
-    /* ── Main chat area ── */
+    /* ── Main chat ── */
     #main {
       flex: 1;
       display: flex;
@@ -120,7 +276,7 @@
       gap: 8px;
       flex-wrap: wrap;
       justify-content: flex-end;
-      max-width: 50%;
+      max-width: 55%;
     }
 
     .online-badge {
@@ -187,13 +343,6 @@
       margin-bottom: 4px;
     }
 
-    .system-msg {
-      text-align: center;
-      font-size: 12px;
-      color: #666;
-      margin: 4px 0;
-    }
-
     .input-area {
       display: flex;
       padding: 14px 20px;
@@ -236,79 +385,24 @@
       color: #444;
       font-size: 16px;
     }
-
-    /* ── Name overlay ── */
-    #nameOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 20;
-    }
-
-    #nameBox {
-      background: #16213e;
-      border-radius: 16px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 320px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    }
-
-    #nameBox h2 { color: #e2e2e2; font-size: 20px; }
-
-    #nameBox .warning-note {
-      font-size: 12px;
-      color: #ffd980;
-      background: #7a4f00;
-      border-radius: 8px;
-      padding: 8px 12px;
-      line-height: 1.5;
-    }
-
-    #nameBox input {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 16px;
-      background: #0f3460;
-      color: #e2e2e2;
-      font-size: 15px;
-      outline: none;
-    }
-
-    #nameBox button {
-      background: #e94560;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: 600;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Name overlay -->
-  <div id="nameOverlay">
-    <div id="nameBox">
-      <h2>Enter your name to chat</h2>
-      <div class="warning-note">
-        ⚠️ Messages are visible to everyone and stored in plain text. Do not send passwords, addresses, or any personal information.
-      </div>
-      <input type="text" id="nameInput" placeholder="Your name..." maxlength="20" />
-      <button id="joinBtn">Join Chat</button>
+  <!-- Auth Screen -->
+  <div id="authScreen">
+    <div id="authBox">
+      <!-- Populated by JS -->
     </div>
   </div>
 
   <!-- Sidebar -->
   <div id="sidebar">
-    <h2>💬 Rooms</h2>
+    <div id="sidebarHeader">
+      <h2>💬 Rooms</h2>
+      <button id="logoutBtn">Log out</button>
+    </div>
+    <div id="currentUserLabel">Signed in as <span id="currentUserSpan"></span></div>
     <div id="roomList"></div>
     <div id="createRoomArea">
       <input type="text" id="newRoomInput" placeholder="New room name..." maxlength="24" />
@@ -333,6 +427,7 @@
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -346,48 +441,184 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
+    const db   = firebase.database();
+    const auth = firebase.auth();
 
-    // ── Preset rooms ──────────────────────────────────────────────
     const PRESET_ROOMS = [
-      { id: "general",  label: "General",  icon: "🌐" },
-      { id: "gaming",   label: "Gaming",   icon: "🎮" },
-      { id: "random",   label: "Random",   icon: "🎲" },
-      { id: "tech",     label: "Tech",     icon: "💻" }
+      { id: "general", label: "General", icon: "🌐" },
+      { id: "gaming",  label: "Gaming",  icon: "🎮" },
+      { id: "random",  label: "Random",  icon: "🎲" },
+      { id: "tech",    label: "Tech",    icon: "💻" }
     ];
 
-    let username    = "";
-    let currentRoom = null;
-    let presenceRef = null;
-    let msgListener = null;
+    let username     = "";
+    let currentRoom  = null;
+    let presenceRef  = null;
+    let msgListener  = null;
     let onlineListener = null;
 
-    // ── Name prompt ───────────────────────────────────────────────
-    function setName() {
-      const val = document.getElementById("nameInput").value.trim();
-      if (!val) return;
-      username = val;
-      document.getElementById("nameOverlay").style.display = "none";
-      initRooms();
-    }
-
-    document.getElementById("joinBtn").addEventListener("click", setName);
-    document.getElementById("nameInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") setName();
+    // ── Auth state observer ───────────────────────────────────────
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Fetch display name from DB
+        db.ref("users/" + user.uid + "/name").once("value", snap => {
+          username = snap.val() || user.email;
+          document.getElementById("currentUserSpan").textContent = username;
+          document.getElementById("authScreen").style.display = "none";
+          initRooms();
+        });
+      } else {
+        showLoginScreen();
+      }
     });
 
-    // ── Build sidebar rooms ───────────────────────────────────────
+    // ── SCREEN: Login ─────────────────────────────────────────────
+    function showLoginScreen() {
+      const box = document.getElementById("authBox");
+      box.innerHTML = `
+        <h2>💬 Welcome Back</h2>
+        <p>Select your account or create a new one</p>
+        <div id="userList"></div>
+        <div id="authError"></div>
+        <div id="passwordSection" style="display:none; flex-direction:column; gap:10px;">
+          <input type="password" id="loginPassword" placeholder="Enter your password..." />
+          <button class="primary" id="loginConfirmBtn">Sign In</button>
+          <button class="secondary" id="backBtn">← Back</button>
+        </div>
+        <button class="secondary" id="goRegisterBtn">+ Create new account</button>
+      `;
+
+      loadUserList();
+
+      document.getElementById("goRegisterBtn").addEventListener("click", showRegisterScreen);
+      document.getElementById("authScreen").style.display = "flex";
+    }
+
+    function loadUserList() {
+      db.ref("usernames").once("value", snap => {
+        const data = snap.val() || {};
+        const list = document.getElementById("userList");
+        list.innerHTML = "";
+
+        if (Object.keys(data).length === 0) {
+          list.innerHTML = `<p style="color:#666; font-size:13px; text-align:center;">No accounts yet — create one below.</p>`;
+          return;
+        }
+
+        Object.entries(data).forEach(([name, email]) => {
+          const btn = document.createElement("button");
+          btn.className = "user-btn";
+          btn.innerHTML = `
+            <div class="user-avatar">${name.charAt(0).toUpperCase()}</div>
+            ${name}
+          `;
+          btn.addEventListener("click", () => selectUser(name, email));
+          list.appendChild(btn);
+        });
+      });
+    }
+
+    let selectedEmail = "";
+
+    function selectUser(name, email) {
+      selectedEmail = email;
+      document.querySelectorAll(".user-btn").forEach(b => b.classList.remove("selected"));
+      event.currentTarget.classList.add("selected");
+
+      const section = document.getElementById("passwordSection");
+      section.style.display = "flex";
+      document.getElementById("goRegisterBtn").style.display = "none";
+      document.getElementById("authError").textContent = "";
+      document.getElementById("loginPassword").focus();
+
+      document.getElementById("loginConfirmBtn").onclick = () => signIn(email);
+      document.getElementById("backBtn").onclick = () => {
+        section.style.display = "none";
+        document.getElementById("goRegisterBtn").style.display = "block";
+        document.getElementById("authError").textContent = "";
+        document.querySelectorAll(".user-btn").forEach(b => b.classList.remove("selected"));
+      };
+      document.getElementById("loginPassword").onkeydown = e => {
+        if (e.key === "Enter") signIn(email);
+      };
+    }
+
+    function signIn(email) {
+      const password = document.getElementById("loginPassword").value;
+      if (!password) return;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .catch(err => {
+          document.getElementById("authError").textContent = "Incorrect password. Please try again.";
+        });
+    }
+
+    // ── SCREEN: Register ──────────────────────────────────────────
+    function showRegisterScreen() {
+      const box = document.getElementById("authBox");
+      box.innerHTML = `
+        <h2>💬 Create Account</h2>
+        <div class="warning-note">⚠️ Messages are public and stored in plain text. Do not use a password you use elsewhere.</div>
+        <input type="text"     id="regName"     placeholder="Your display name..."  maxlength="20" />
+        <input type="password" id="regPassword" placeholder="Choose a password..."  />
+        <input type="password" id="regConfirm"  placeholder="Confirm password..."   />
+        <div id="authError"></div>
+        <button class="primary"   id="registerBtn">Create Account</button>
+        <button class="secondary" id="backToLoginBtn">← Back to login</button>
+      `;
+
+      document.getElementById("registerBtn").addEventListener("click", register);
+      document.getElementById("backToLoginBtn").addEventListener("click", showLoginScreen);
+      document.getElementById("regConfirm").addEventListener("keydown", e => {
+        if (e.key === "Enter") register();
+      });
+    }
+
+    function register() {
+      const name     = document.getElementById("regName").value.trim();
+      const password = document.getElementById("regPassword").value;
+      const confirm  = document.getElementById("regConfirm").value;
+      const errEl    = document.getElementById("authError");
+
+      if (!name)               return errEl.textContent = "Please enter a display name.";
+      if (password.length < 6) return errEl.textContent = "Password must be at least 6 characters.";
+      if (password !== confirm) return errEl.textContent = "Passwords do not match.";
+
+      // Use a fake email based on name since Firebase Auth requires email
+      const email = name.toLowerCase().replace(/\s+/g, "") + "@chat.app";
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(cred => {
+          const uid = cred.user.uid;
+          // Store name mapped to email for login list
+          return Promise.all([
+            db.ref("users/" + uid + "/name").set(name),
+            db.ref("usernames/" + name).set(email)
+          ]);
+        })
+        .catch(err => {
+          if (err.code === "auth/email-already-in-use") {
+            errEl.textContent = "That name is already taken. Choose a different one.";
+          } else {
+            errEl.textContent = err.message;
+          }
+        });
+    }
+
+    // ── Logout ────────────────────────────────────────────────────
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      if (presenceRef) presenceRef.remove();
+      auth.signOut();
+    });
+
+    // ── Rooms ─────────────────────────────────────────────────────
     function initRooms() {
       const list = document.getElementById("roomList");
       list.innerHTML = "";
-
-      // Preset rooms
       PRESET_ROOMS.forEach(r => addRoomToSidebar(r.id, r.label, r.icon));
 
-      // Custom rooms from Firebase
-      db.ref("rooms").on("value", snapshot => {
-        const data = snapshot.val() || {};
-        // Remove old custom entries before re-rendering
+      db.ref("rooms").on("value", snap => {
+        const data = snap.val() || {};
         document.querySelectorAll(".room-item.custom").forEach(el => el.remove());
         Object.keys(data).forEach(id => {
           if (!PRESET_ROOMS.find(r => r.id === id)) {
@@ -402,12 +633,11 @@
       const item = document.createElement("div");
       item.className = "room-item" + (isCustom ? " custom" : "");
       item.dataset.id = id;
-      item.innerHTML = `<span class="room-icon">${icon}</span>${label}`;
+      item.innerHTML = `<span>${icon}</span>${label}`;
       item.addEventListener("click", () => joinRoom(id, label, icon));
       list.appendChild(item);
     }
 
-    // ── Create custom room ────────────────────────────────────────
     document.getElementById("createRoomBtn").addEventListener("click", createRoom);
     document.getElementById("newRoomInput").addEventListener("keydown", e => {
       if (e.key === "Enter") createRoom();
@@ -419,45 +649,36 @@
       if (!label) return;
       const id = label.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
       if (!id) return;
-      db.ref("rooms/" + id).set({ label: label });
+      db.ref("rooms/" + id).set({ label });
       input.value = "";
       joinRoom(id, label, "💬");
     }
 
-    // ── Join a room ───────────────────────────────────────────────
     function joinRoom(roomId, roomLabel, roomIcon) {
       if (currentRoom === roomId) return;
-
-      // Clean up previous listeners and presence
       if (presenceRef) presenceRef.remove();
       if (msgListener) db.ref("messages/" + currentRoom).off("child_added", msgListener);
       if (onlineListener) db.ref("presence/" + currentRoom).off("value", onlineListener);
 
       currentRoom = roomId;
 
-      // Update sidebar active state
       document.querySelectorAll(".room-item").forEach(el => {
         el.classList.toggle("active", el.dataset.id === roomId);
       });
 
-      // Update header
       document.getElementById("roomTitle").textContent = roomIcon + " " + roomLabel;
-
-      // Show chat UI
       document.getElementById("noRoom").style.display = "none";
       document.getElementById("messages").style.display = "flex";
       document.getElementById("inputArea").style.display = "flex";
       document.getElementById("messages").innerHTML = "";
       document.getElementById("onlineList").innerHTML = "";
 
-      // Set presence
       presenceRef = db.ref("presence/" + roomId + "/" + username);
       presenceRef.set(true);
       presenceRef.onDisconnect().remove();
 
-      // Listen for online users
-      onlineListener = db.ref("presence/" + roomId).on("value", snapshot => {
-        const data = snapshot.val() || {};
+      onlineListener = db.ref("presence/" + roomId).on("value", snap => {
+        const data = snap.val() || {};
         const onlineDiv = document.getElementById("onlineList");
         onlineDiv.innerHTML = "";
         Object.keys(data).forEach(user => {
@@ -468,27 +689,22 @@
         });
       });
 
-      // Listen for messages
-      msgListener = db.ref("messages/" + roomId).limitToLast(100).on("child_added", snapshot => {
-        const data = snapshot.val();
-        renderMessage(data);
+      msgListener = db.ref("messages/" + roomId).limitToLast(100).on("child_added", snap => {
+        renderMessage(snap.val());
       });
 
       document.getElementById("messageInput").focus();
     }
 
-    // ── Send message ──────────────────────────────────────────────
     function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
       if (!text || !username || !currentRoom) return;
-
       db.ref("messages/" + currentRoom).push({
         sender: username,
-        text: text,
+        text,
         timestamp: Date.now()
       });
-
       input.value = "";
     }
 
@@ -497,21 +713,17 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    // ── Render a message bubble ───────────────────────────────────
     function renderMessage(data) {
       const messages = document.getElementById("messages");
       const isSent = data.sender === username;
-
       const bubble = document.createElement("div");
       bubble.className = "bubble " + (isSent ? "sent" : "received");
-
       if (!isSent) {
-        const senderLabel = document.createElement("div");
-        senderLabel.className = "sender";
-        senderLabel.textContent = data.sender;
-        bubble.appendChild(senderLabel);
+        const label = document.createElement("div");
+        label.className = "sender";
+        label.textContent = data.sender;
+        bubble.appendChild(label);
       }
-
       bubble.appendChild(document.createTextNode(data.text));
       messages.appendChild(bubble);
       messages.scrollTop = messages.scrollHeight;
