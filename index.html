@@ -26,6 +26,15 @@
       border-bottom: 2px solid #e94560;
     }
 
+    .warning-banner {
+      background: #7a4f00;
+      color: #ffd980;
+      font-size: 12px;
+      text-align: center;
+      padding: 7px 16px;
+      border-bottom: 1px solid #b87300;
+    }
+
     .messages {
       flex: 1;
       overflow-y: auto;
@@ -121,6 +130,15 @@
 
     #nameBox h2 { color: #e2e2e2; font-size: 20px; }
 
+    #nameBox .warning-note {
+      font-size: 12px;
+      color: #ffd980;
+      background: #7a4f00;
+      border-radius: 8px;
+      padding: 8px 12px;
+      line-height: 1.5;
+    }
+
     #nameBox input {
       border: none;
       border-radius: 10px;
@@ -148,19 +166,22 @@
   <div id="nameOverlay">
     <div id="nameBox">
       <h2>Enter your name to chat</h2>
+      <div class="warning-note">
+        ⚠️ Messages are visible to everyone and stored in plain text. Do not send passwords, addresses, or any personal information.
+      </div>
       <input type="text" id="nameInput" placeholder="Your name..." maxlength="20" />
       <button id="joinBtn">Join Chat</button>
     </div>
   </div>
 
   <div class="chat-header">💬 Live Chat</div>
+  <div class="warning-banner">⚠️ Messages are public and stored in plain text — do not send personal information.</div>
   <div class="messages" id="messages"></div>
   <div class="input-area">
     <input type="text" id="messageInput" placeholder="Type a message..." />
     <button id="sendBtn">➤</button>
   </div>
 
-  <!-- Firebase v8 compat (most reliable for GitHub Pages) -->
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
@@ -181,7 +202,6 @@
 
     let username = "";
 
-    // Join chat
     function setName() {
       const val = document.getElementById("nameInput").value.trim();
       if (!val) return;
@@ -195,7 +215,6 @@
       if (e.key === "Enter") setName();
     });
 
-    // Send message
     function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
@@ -215,7 +234,6 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    // Receive messages in real time
     messagesRef.on("child_added", snapshot => {
       const data = snapshot.val();
       const messages = document.getElementById("messages");
