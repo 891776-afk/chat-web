@@ -94,7 +94,6 @@
       color: white;
       font-size: 20px;
       cursor: pointer;
-      transition: background 0.2s;
     }
 
     .input-area button:hover { background: #c73652; }
@@ -102,7 +101,7 @@
     #nameOverlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0,0,0,0.8);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -150,7 +149,7 @@
     <div id="nameBox">
       <h2>Enter your name to chat</h2>
       <input type="text" id="nameInput" placeholder="Your name..." maxlength="20" />
-      <button onclick="setName()">Join Chat</button>
+      <button id="joinBtn">Join Chat</button>
     </div>
   </div>
 
@@ -158,14 +157,14 @@
   <div class="messages" id="messages"></div>
   <div class="input-area">
     <input type="text" id="messageInput" placeholder="Type a message..." />
-    <button onclick="sendMessage()">➤</button>
+    <button id="sendBtn">➤</button>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getDatabase, ref, push, onChildAdded }
-      from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  <!-- Firebase v8 compat (most reliable for GitHub Pages) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDsxr4LTFI3qoA3S4hy3VFiNw8Q4_cIvSc",
       authDomain: "chat-web-ff05b.firebaseapp.com",
@@ -176,43 +175,48 @@
       appId: "1:617118374613:web:8abe7bbbb513cbd2f8205c"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db  = getDatabase(app);
-    const messagesRef = ref(db, "messages");
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const messagesRef = db.ref("messages");
 
     let username = "";
 
-    window.setName = function () {
+    // Join chat
+    function setName() {
       const val = document.getElementById("nameInput").value.trim();
       if (!val) return;
       username = val;
       document.getElementById("nameOverlay").style.display = "none";
       document.getElementById("messageInput").focus();
-    };
+    }
 
+    document.getElementById("joinBtn").addEventListener("click", setName);
     document.getElementById("nameInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") window.setName();
+      if (e.key === "Enter") setName();
     });
 
-    window.sendMessage = function () {
+    // Send message
+    function sendMessage() {
       const input = document.getElementById("messageInput");
-      const text  = input.value.trim();
+      const text = input.value.trim();
       if (!text || !username) return;
 
-      push(messagesRef, {
+      messagesRef.push({
         sender: username,
         text: text,
         timestamp: Date.now()
       });
 
       input.value = "";
-    };
+    }
 
+    document.getElementById("sendBtn").addEventListener("click", sendMessage);
     document.getElementById("messageInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") window.sendMessage();
+      if (e.key === "Enter") sendMessage();
     });
 
-    onChildAdded(messagesRef, snapshot => {
+    // Receive messages in real time
+    messagesRef.on("child_added", snapshot => {
       const data = snapshot.val();
       const messages = document.getElementById("messages");
       const isSent = data.sender === username;
