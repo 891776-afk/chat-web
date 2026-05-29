@@ -13,17 +13,131 @@
       height: 100vh;
       width: 100vw;
       display: flex;
+      overflow: hidden;
+      color: #e2e2e2;
+    }
+
+    /* ── Sidebar ── */
+    #sidebar {
+      width: 260px;
+      min-width: 260px;
+      background: #0f3460;
+      display: flex;
+      flex-direction: column;
+      border-right: 2px solid #e94560;
+    }
+
+    #sidebar h2 {
+      padding: 18px 16px 10px;
+      font-size: 18px;
+      font-weight: 700;
+      color: #e94560;
+      border-bottom: 1px solid #1a1a2e;
+    }
+
+    #roomList {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px 0;
+    }
+
+    .room-item {
+      padding: 12px 18px;
+      cursor: pointer;
+      font-size: 14px;
+      border-left: 3px solid transparent;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .room-item:hover { background: #16213e; }
+
+    .room-item.active {
+      background: #16213e;
+      border-left: 3px solid #e94560;
+      font-weight: 600;
+      color: #e94560;
+    }
+
+    .room-item .room-icon { font-size: 16px; }
+
+    #createRoomArea {
+      padding: 12px;
+      border-top: 1px solid #1a1a2e;
+      display: flex;
+      gap: 8px;
+    }
+
+    #createRoomArea input {
+      flex: 1;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 10px;
+      background: #16213e;
+      color: #e2e2e2;
+      font-size: 13px;
+      outline: none;
+    }
+
+    #createRoomArea input::placeholder { color: #666; }
+
+    #createRoomArea button {
+      background: #e94560;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: white;
+      font-size: 18px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    /* ── Main chat area ── */
+    #main {
+      flex: 1;
+      display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    .chat-header {
+    #chatHeader {
       background: #0f3460;
-      padding: 16px 24px;
-      color: #e2e2e2;
-      font-size: 20px;
+      padding: 14px 20px;
+      font-size: 18px;
       font-weight: 600;
       border-bottom: 2px solid #e94560;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #onlineList {
+      font-size: 12px;
+      color: #aaa;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: 50%;
+    }
+
+    .online-badge {
+      background: #16213e;
+      border-radius: 12px;
+      padding: 3px 10px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .online-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4caf50;
+      display: inline-block;
     }
 
     .warning-banner {
@@ -31,11 +145,11 @@
       color: #ffd980;
       font-size: 12px;
       text-align: center;
-      padding: 7px 16px;
+      padding: 6px 16px;
       border-bottom: 1px solid #b87300;
     }
 
-    .messages {
+    #messages {
       flex: 1;
       overflow-y: auto;
       padding: 20px 24px;
@@ -73,6 +187,13 @@
       margin-bottom: 4px;
     }
 
+    .system-msg {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin: 4px 0;
+    }
+
     .input-area {
       display: flex;
       padding: 14px 20px;
@@ -107,14 +228,24 @@
 
     .input-area button:hover { background: #c73652; }
 
-    #nameOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
+    #noRoom {
+      flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 10;
+      color: #444;
+      font-size: 16px;
+    }
+
+    /* ── Name overlay ── */
+    #nameOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
     }
 
     #nameBox {
@@ -125,7 +256,7 @@
       flex-direction: column;
       gap: 14px;
       width: 320px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
     #nameBox h2 { color: #e2e2e2; font-size: 20px; }
@@ -163,6 +294,7 @@
 </head>
 <body>
 
+  <!-- Name overlay -->
   <div id="nameOverlay">
     <div id="nameBox">
       <h2>Enter your name to chat</h2>
@@ -174,12 +306,29 @@
     </div>
   </div>
 
-  <div class="chat-header"> Betty Chat</div>
-  <div class="warning-banner">⚠️ Messages are public and stored in plain text — do not send personal information.</div>
-  <div class="messages" id="messages"></div>
-  <div class="input-area">
-    <input type="text" id="messageInput" placeholder="Type a message or not idc..." />
-    <button id="sendBtn">➤</button>
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <h2>💬 Rooms</h2>
+    <div id="roomList"></div>
+    <div id="createRoomArea">
+      <input type="text" id="newRoomInput" placeholder="New room name..." maxlength="24" />
+      <button id="createRoomBtn">+</button>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+    <div id="chatHeader">
+      <span id="roomTitle">Select a room</span>
+      <div id="onlineList"></div>
+    </div>
+    <div class="warning-banner">⚠️ Messages are public and stored in plain text — do not send personal information.</div>
+    <div id="noRoom">← Select or create a room to start chatting</div>
+    <div id="messages" style="display:none;"></div>
+    <div class="input-area" id="inputArea" style="display:none;">
+      <input type="text" id="messageInput" placeholder="Type a message..." />
+      <button id="sendBtn">➤</button>
+    </div>
   </div>
 
   <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -198,16 +347,28 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
-    const messagesRef = db.ref("messages");
 
-    let username = "";
+    // ── Preset rooms ──────────────────────────────────────────────
+    const PRESET_ROOMS = [
+      { id: "general",  label: "General",  icon: "🌐" },
+      { id: "gaming",   label: "Gaming",   icon: "🎮" },
+      { id: "random",   label: "Random",   icon: "🎲" },
+      { id: "tech",     label: "Tech",     icon: "💻" }
+    ];
 
+    let username    = "";
+    let currentRoom = null;
+    let presenceRef = null;
+    let msgListener = null;
+    let onlineListener = null;
+
+    // ── Name prompt ───────────────────────────────────────────────
     function setName() {
       const val = document.getElementById("nameInput").value.trim();
       if (!val) return;
       username = val;
       document.getElementById("nameOverlay").style.display = "none";
-      document.getElementById("messageInput").focus();
+      initRooms();
     }
 
     document.getElementById("joinBtn").addEventListener("click", setName);
@@ -215,12 +376,114 @@
       if (e.key === "Enter") setName();
     });
 
+    // ── Build sidebar rooms ───────────────────────────────────────
+    function initRooms() {
+      const list = document.getElementById("roomList");
+      list.innerHTML = "";
+
+      // Preset rooms
+      PRESET_ROOMS.forEach(r => addRoomToSidebar(r.id, r.label, r.icon));
+
+      // Custom rooms from Firebase
+      db.ref("rooms").on("value", snapshot => {
+        const data = snapshot.val() || {};
+        // Remove old custom entries before re-rendering
+        document.querySelectorAll(".room-item.custom").forEach(el => el.remove());
+        Object.keys(data).forEach(id => {
+          if (!PRESET_ROOMS.find(r => r.id === id)) {
+            addRoomToSidebar(id, data[id].label, "💬", true);
+          }
+        });
+      });
+    }
+
+    function addRoomToSidebar(id, label, icon, isCustom = false) {
+      const list = document.getElementById("roomList");
+      const item = document.createElement("div");
+      item.className = "room-item" + (isCustom ? " custom" : "");
+      item.dataset.id = id;
+      item.innerHTML = `<span class="room-icon">${icon}</span>${label}`;
+      item.addEventListener("click", () => joinRoom(id, label, icon));
+      list.appendChild(item);
+    }
+
+    // ── Create custom room ────────────────────────────────────────
+    document.getElementById("createRoomBtn").addEventListener("click", createRoom);
+    document.getElementById("newRoomInput").addEventListener("keydown", e => {
+      if (e.key === "Enter") createRoom();
+    });
+
+    function createRoom() {
+      const input = document.getElementById("newRoomInput");
+      const label = input.value.trim();
+      if (!label) return;
+      const id = label.toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9-]/g, "");
+      if (!id) return;
+      db.ref("rooms/" + id).set({ label: label });
+      input.value = "";
+      joinRoom(id, label, "💬");
+    }
+
+    // ── Join a room ───────────────────────────────────────────────
+    function joinRoom(roomId, roomLabel, roomIcon) {
+      if (currentRoom === roomId) return;
+
+      // Clean up previous listeners and presence
+      if (presenceRef) presenceRef.remove();
+      if (msgListener) db.ref("messages/" + currentRoom).off("child_added", msgListener);
+      if (onlineListener) db.ref("presence/" + currentRoom).off("value", onlineListener);
+
+      currentRoom = roomId;
+
+      // Update sidebar active state
+      document.querySelectorAll(".room-item").forEach(el => {
+        el.classList.toggle("active", el.dataset.id === roomId);
+      });
+
+      // Update header
+      document.getElementById("roomTitle").textContent = roomIcon + " " + roomLabel;
+
+      // Show chat UI
+      document.getElementById("noRoom").style.display = "none";
+      document.getElementById("messages").style.display = "flex";
+      document.getElementById("inputArea").style.display = "flex";
+      document.getElementById("messages").innerHTML = "";
+      document.getElementById("onlineList").innerHTML = "";
+
+      // Set presence
+      presenceRef = db.ref("presence/" + roomId + "/" + username);
+      presenceRef.set(true);
+      presenceRef.onDisconnect().remove();
+
+      // Listen for online users
+      onlineListener = db.ref("presence/" + roomId).on("value", snapshot => {
+        const data = snapshot.val() || {};
+        const onlineDiv = document.getElementById("onlineList");
+        onlineDiv.innerHTML = "";
+        Object.keys(data).forEach(user => {
+          const badge = document.createElement("div");
+          badge.className = "online-badge";
+          badge.innerHTML = `<span class="online-dot"></span>${user}`;
+          onlineDiv.appendChild(badge);
+        });
+      });
+
+      // Listen for messages
+      msgListener = db.ref("messages/" + roomId).limitToLast(100).on("child_added", snapshot => {
+        const data = snapshot.val();
+        renderMessage(data);
+      });
+
+      document.getElementById("messageInput").focus();
+    }
+
+    // ── Send message ──────────────────────────────────────────────
     function sendMessage() {
       const input = document.getElementById("messageInput");
       const text = input.value.trim();
-      if (!text || !username) return;
+      if (!text || !username || !currentRoom) return;
 
-      messagesRef.push({
+      db.ref("messages/" + currentRoom).push({
         sender: username,
         text: text,
         timestamp: Date.now()
@@ -234,8 +497,8 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    messagesRef.on("child_added", snapshot => {
-      const data = snapshot.val();
+    // ── Render a message bubble ───────────────────────────────────
+    function renderMessage(data) {
       const messages = document.getElementById("messages");
       const isSent = data.sender === username;
 
@@ -252,7 +515,7 @@
       bubble.appendChild(document.createTextNode(data.text));
       messages.appendChild(bubble);
       messages.scrollTop = messages.scrollHeight;
-    });
+    }
   </script>
 
 </body>
