@@ -9,18 +9,18 @@
 
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: #1a1a2e;
+      background: #060d1f;
       height: 100vh;
       width: 100vw;
       display: flex;
       overflow: hidden;
-      color: #007aff;
+      color: #e2e2e2;
     }
 
     #authScreen {
       position: fixed;
       inset: 0;
-      background: #1a1a2e;
+      background: #060d1f;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -28,7 +28,7 @@
     }
 
     #authBox {
-      background: #16213e;
+      background: #0d1b3e;
       border-radius: 16px;
       padding: 36px;
       display: flex;
@@ -38,7 +38,7 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
-    #authBox h2 { color: #e94560; font-size: 22px; text-align: center; }
+    #authBox h2 { color: #3b82f6; font-size: 22px; text-align: center; }
     #authBox p  { font-size: 13px; color: #aaa; text-align: center; }
 
     .warning-note {
@@ -54,7 +54,7 @@
       border: none;
       border-radius: 10px;
       padding: 12px 16px;
-      background: #0f3460;
+      background: #162447;
       color: #e2e2e2;
       font-size: 15px;
       outline: none;
@@ -64,7 +64,7 @@
     #authBox input::placeholder { color: #666; }
 
     #authBox button.primary {
-      background: #007aff;
+      background: #2563eb;
       border: none;
       border-radius: 10px;
       padding: 12px;
@@ -75,22 +75,24 @@
       width: 100%;
     }
 
+    #authBox button.primary:hover { background: #1d4ed8; }
+
     #authBox button.secondary {
       background: transparent;
-      border: 1px solid #444;
+      border: 1px solid #1e3a6e;
       border-radius: 10px;
       padding: 10px;
-      color: #005AE6;
+      color: #aaa;
       font-size: 13px;
       cursor: pointer;
       width: 100%;
     }
 
-    #authBox button.secondary:hover { border-color: #e94560; color: #e94560; }
-    #authError { color: #e94560; font-size: 13px; text-align: center; min-height: 18px; }
+    #authBox button.secondary:hover { border-color: #3b82f6; color: #3b82f6; }
+    #authError { color: #f87171; font-size: 13px; text-align: center; min-height: 18px; }
 
     .user-btn {
-      background: #0f3460;
+      background: #162447;
       border: 2px solid transparent;
       border-radius: 10px;
       padding: 10px 14px;
@@ -105,14 +107,14 @@
       width: 100%;
     }
 
-    .user-btn:hover { border-color: #e94560; }
-    .user-btn.selected { border-color: #e94560; background: #1a1a2e; }
+    .user-btn:hover { border-color: #3b82f6; }
+    .user-btn.selected { border-color: #3b82f6; background: #0d1b3e; }
 
     .user-avatar {
       width: 32px;
       height: 32px;
       border-radius: 50%;
-      background: #e94560;
+      background: #2563eb;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -126,26 +128,26 @@
     #sidebar {
       width: 260px;
       min-width: 260px;
-      background: #0f3460;
+      background: #0d1b3e;
       display: flex;
       flex-direction: column;
-      border-right: 2px solid #e94560;
+      border-right: 2px solid #2563eb;
     }
 
     #sidebarHeader {
       padding: 14px 16px;
-      border-bottom: 1px solid #1a1a2e;
+      border-bottom: 1px solid #060d1f;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 6px;
     }
 
-    #sidebarHeader h2 { font-size: 18px; font-weight: 700; color: #e94560; }
+    #sidebarHeader h2 { font-size: 18px; font-weight: 700; color: #3b82f6; }
 
     #logoutBtn, #changePassBtn {
       background: transparent;
-      border: 1px solid #444;
+      border: 1px solid #1e3a6e;
       border-radius: 8px;
       color: #aaa;
       font-size: 12px;
@@ -153,13 +155,13 @@
       cursor: pointer;
     }
 
-    #logoutBtn:hover, #changePassBtn:hover { border-color: #e94560; color: #e94560; }
+    #logoutBtn:hover, #changePassBtn:hover { border-color: #3b82f6; color: #3b82f6; }
 
     #currentUserLabel {
       padding: 8px 16px 12px;
       font-size: 12px;
       color: #aaa;
-      border-bottom: 1px solid #1a1a2e;
+      border-bottom: 1px solid #060d1f;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -194,19 +196,19 @@
       justify-content: space-between;
     }
 
-    .room-item:hover { background: #16213e; }
+    .room-item:hover { background: #0a1628; }
     .room-item.active {
-      background: #16213e;
-      border-left: 3px solid #e94560;
+      background: #0a1628;
+      border-left: 3px solid #3b82f6;
       font-weight: 600;
-      color: #e94560;
+      color: #3b82f6;
     }
 
     .room-item-label { display: flex; align-items: center; gap: 8px; }
 
     #createRoomArea {
       padding: 12px;
-      border-top: 1px solid #1a1a2e;
+      border-top: 1px solid #060d1f;
       display: flex;
       gap: 8px;
     }
@@ -216,7 +218,7 @@
       border: none;
       border-radius: 8px;
       padding: 8px 10px;
-      background: #16213e;
+      background: #0a1628;
       color: #e2e2e2;
       font-size: 13px;
       outline: none;
@@ -225,7 +227,7 @@
     #createRoomArea input::placeholder { color: #666; }
 
     #createRoomArea button {
-      background: #e94560;
+      background: #2563eb;
       border: none;
       border-radius: 8px;
       padding: 8px 12px;
@@ -235,14 +237,16 @@
       font-weight: 700;
     }
 
+    #createRoomArea button:hover { background: #1d4ed8; }
+
     #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
     #chatHeader {
-      background: #0f3460;
+      background: #0d1b3e;
       padding: 14px 20px;
       font-size: 18px;
       font-weight: 600;
-      border-bottom: 2px solid #e94560;
+      border-bottom: 2px solid #2563eb;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -259,7 +263,7 @@
     }
 
     .online-badge {
-      background: #16213e;
+      background: #0a1628;
       border-radius: 12px;
       padding: 3px 10px;
       display: flex;
@@ -298,14 +302,14 @@
     }
 
     .bubble.sent {
-      background: #007aff;
+      background: #2563eb;
       color: white;
       align-self: flex-end;
       border-bottom-right-radius: 4px;
     }
 
     .bubble.received {
-      background: #0f3460;
+      background: #0d1b3e;
       color: #e2e2e2;
       align-self: flex-start;
       border-bottom-left-radius: 4px;
@@ -336,7 +340,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: #0f3460;
+      background: #0d1b3e;
       border-radius: 12px;
       padding: 10px 14px;
       text-decoration: none;
@@ -363,22 +367,22 @@
     }
 
     .bubble:hover .delete-msg-btn { display: block; }
-    .delete-msg-btn:hover { color: #e94560; }
+    .delete-msg-btn:hover { color: #f87171; }
 
     #uploadProgress {
-      background: #0f3460;
+      background: #0d1b3e;
       padding: 6px 20px;
       font-size: 12px;
       color: #aaa;
       display: none;
       align-items: center;
       gap: 10px;
-      border-top: 1px solid #1a1a2e;
+      border-top: 1px solid #060d1f;
     }
 
     .progress-bar-wrap {
       flex: 1;
-      background: #16213e;
+      background: #0a1628;
       border-radius: 4px;
       height: 6px;
       overflow: hidden;
@@ -386,7 +390,7 @@
 
     .progress-bar-fill {
       height: 100%;
-      background: #e94560;
+      background: #2563eb;
       border-radius: 4px;
       width: 0%;
       transition: width 0.2s;
@@ -395,9 +399,9 @@
     .input-area {
       display: flex;
       padding: 14px 20px;
-      background: #0f3460;
+      background: #0d1b3e;
       gap: 10px;
-      border-top: 2px solid #e94560;
+      border-top: 2px solid #2563eb;
       align-items: center;
     }
 
@@ -406,7 +410,7 @@
       border: none;
       border-radius: 24px;
       padding: 12px 18px;
-      background: #16213e;
+      background: #0a1628;
       color: #e2e2e2;
       font-size: 15px;
       outline: none;
@@ -415,7 +419,7 @@
     .input-area input[type="text"]::placeholder { color: #888; }
 
     #fileBtn {
-      background: #16213e;
+      background: #0a1628;
       border: none;
       border-radius: 50%;
       width: 46px;
@@ -429,11 +433,11 @@
       flex-shrink: 0;
     }
 
-    #fileBtn:hover { background: #e94560; color: white; }
+    #fileBtn:hover { background: #2563eb; color: white; }
     #fileInput { display: none; }
 
     #sendBtn {
-      background: #e94560;
+      background: #2563eb;
       border: none;
       border-radius: 50%;
       width: 46px;
@@ -444,18 +448,17 @@
       flex-shrink: 0;
     }
 
-    #sendBtn:hover { background: #c73652; }
+    #sendBtn:hover { background: #1d4ed8; }
 
     #noRoom {
       flex: 1;
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #444;
+      color: #1e3a6e;
       font-size: 16px;
     }
 
-    /* Lightbox */
     #lightbox {
       position: fixed;
       inset: 0;
@@ -474,7 +477,6 @@
       object-fit: contain;
     }
 
-    /* Change Password */
     #changePassOverlay {
       position: fixed;
       inset: 0;
@@ -486,7 +488,7 @@
     }
 
     #changePassBox {
-      background: #16213e;
+      background: #0d1b3e;
       border-radius: 16px;
       padding: 32px;
       display: flex;
@@ -496,13 +498,13 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.6);
     }
 
-    #changePassBox h2 { color: #e94560; font-size: 20px; }
+    #changePassBox h2 { color: #3b82f6; font-size: 20px; }
 
     #changePassBox input {
       border: none;
       border-radius: 10px;
       padding: 12px 16px;
-      background: #0f3460;
+      background: #162447;
       color: #e2e2e2;
       font-size: 15px;
       outline: none;
@@ -512,7 +514,7 @@
     #changePassBox input::placeholder { color: #666; }
 
     #changePassBox button.primary {
-      background: #e94560;
+      background: #2563eb;
       border: none;
       border-radius: 10px;
       padding: 12px;
@@ -523,9 +525,11 @@
       width: 100%;
     }
 
+    #changePassBox button.primary:hover { background: #1d4ed8; }
+
     #changePassBox button.secondary {
       background: transparent;
-      border: 1px solid #444;
+      border: 1px solid #1e3a6e;
       border-radius: 10px;
       padding: 10px;
       color: #aaa;
@@ -534,11 +538,10 @@
       width: 100%;
     }
 
-    #changePassBox button.secondary:hover { border-color: #e94560; color: #e94560; }
-    #changePassError   { color: #e94560; font-size: 13px; text-align: center; min-height: 18px; }
+    #changePassBox button.secondary:hover { border-color: #3b82f6; color: #3b82f6; }
+    #changePassError   { color: #f87171; font-size: 13px; text-align: center; min-height: 18px; }
     #changePassSuccess { color: #4caf50; font-size: 13px; text-align: center; min-height: 18px; }
 
-    /* Admin Panel */
     #adminPanel {
       position: fixed;
       inset: 0;
@@ -550,7 +553,7 @@
     }
 
     #adminBox {
-      background: #16213e;
+      background: #0d1b3e;
       border-radius: 16px;
       padding: 30px;
       width: 500px;
@@ -569,7 +572,7 @@
     .admin-tab {
       flex: 1;
       padding: 8px;
-      border: 1px solid #444;
+      border: 1px solid #1e3a6e;
       border-radius: 8px;
       background: transparent;
       color: #aaa;
@@ -588,7 +591,7 @@
       color: #aaa;
       text-transform: uppercase;
       letter-spacing: 1px;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid #162447;
       padding-bottom: 6px;
     }
 
@@ -597,7 +600,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 8px 0;
-      border-bottom: 1px solid #0f3460;
+      border-bottom: 1px solid #162447;
       font-size: 14px;
     }
 
@@ -606,14 +609,14 @@
 
     .preset-tag {
       font-size: 11px;
-      background: #0f3460;
+      background: #162447;
       color: #aaa;
       border-radius: 6px;
       padding: 2px 7px;
     }
 
     .delete-btn {
-      background: #e94560;
+      background: #f87171;
       border: none;
       border-radius: 8px;
       padding: 5px 12px;
@@ -626,7 +629,7 @@
 
     #closeAdminBtn {
       background: transparent;
-      border: 1px solid #444;
+      border: 1px solid #1e3a6e;
       border-radius: 10px;
       padding: 10px;
       color: #aaa;
@@ -634,7 +637,7 @@
       cursor: pointer;
     }
 
-    #closeAdminBtn:hover { border-color: #e94560; color: #e94560; }
+    #closeAdminBtn:hover { border-color: #3b82f6; color: #3b82f6; }
   </style>
 </head>
 <body>
@@ -754,7 +757,6 @@
     let msgListener    = null;
     let onlineListener = null;
 
-    // ── Auth ──────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
       if (user) {
         db.ref("users/" + user.uid + "/name").once("value", snap => {
@@ -774,7 +776,6 @@
       }
     });
 
-    // ── Login ─────────────────────────────────────────────────────
     function showLoginScreen() {
       document.getElementById("authScreen").style.display = "flex";
       const box = document.getElementById("authBox");
@@ -849,7 +850,6 @@
         });
     }
 
-    // ── Register ──────────────────────────────────────────────────
     function showRegisterScreen() {
       const box = document.getElementById("authBox");
       box.innerHTML = `
@@ -890,13 +890,11 @@
         });
     }
 
-    // ── Logout ────────────────────────────────────────────────────
     document.getElementById("logoutBtn").addEventListener("click", () => {
       if (presenceRef) presenceRef.remove();
       auth.signOut();
     });
 
-    // ── Change Password ───────────────────────────────────────────
     document.getElementById("changePassBtn").addEventListener("click", () => {
       document.getElementById("changePassOverlay").style.display = "flex";
       document.getElementById("currentPass").value  = "";
@@ -917,17 +915,13 @@
       const confirm  = document.getElementById("confirmPass").value;
       const errEl    = document.getElementById("changePassError");
       const sucEl    = document.getElementById("changePassSuccess");
-
       errEl.textContent = "";
       sucEl.textContent = "";
-
       if (!current)           return errEl.textContent = "Please enter your current password.";
       if (newPass.length < 6) return errEl.textContent = "New password must be at least 6 characters.";
       if (newPass !== confirm) return errEl.textContent = "Passwords do not match.";
-
       const user       = auth.currentUser;
       const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
-
       user.reauthenticateWithCredential(credential)
         .then(() => user.updatePassword(newPass))
         .then(() => {
@@ -946,7 +940,6 @@
       if (e.key === "Enter") document.getElementById("confirmChangeBtn").click();
     });
 
-    // ── Lightbox ──────────────────────────────────────────────────
     const lightbox = document.getElementById("lightbox");
     lightbox.addEventListener("click", () => lightbox.style.display = "none");
     function openLightbox(src) {
@@ -954,7 +947,6 @@
       lightbox.style.display = "flex";
     }
 
-    // ── File upload via Cloudinary ────────────────────────────────
     document.getElementById("fileBtn").addEventListener("click", () => {
       document.getElementById("fileInput").click();
     });
@@ -962,41 +954,32 @@
     document.getElementById("fileInput").addEventListener("change", async e => {
       const file = e.target.files[0];
       if (!file || !currentRoom) return;
-
       const maxSize = 100 * 1024 * 1024;
       if (file.size > maxSize) {
         alert("File is too large. Maximum size is 100MB.");
         e.target.value = "";
         return;
       }
-
       const progressBar  = document.getElementById("uploadProgress");
       const progressFill = document.getElementById("progressFill");
       const uploadLabel  = document.getElementById("uploadLabel");
-
       progressBar.style.display = "flex";
       uploadLabel.textContent   = "Uploading " + file.name + "...";
       progressFill.style.width  = "0%";
-
       try {
         const formData = new FormData();
         formData.append("file", file);
         formData.append("upload_preset", CLOUDINARY_PRESET);
-
         let fakeProgress = 0;
         const fakeInterval = setInterval(() => {
           fakeProgress = Math.min(fakeProgress + 8, 85);
           progressFill.style.width = fakeProgress + "%";
         }, 200);
-
         const res  = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
         const data = await res.json();
-
         clearInterval(fakeInterval);
         progressFill.style.width = "100%";
-
         if (data.error) throw new Error(data.error.message);
-
         await db.ref("messages/" + currentRoom).push({
           sender:    username,
           type:      getFileType(file.type),
@@ -1004,7 +987,6 @@
           fileUrl:   data.secure_url,
           timestamp: Date.now()
         });
-
       } catch (err) {
         alert("Upload failed: " + err.message);
       } finally {
@@ -1030,7 +1012,6 @@
       return "📎";
     }
 
-    // ── Admin panel ───────────────────────────────────────────────
     document.getElementById("adminPanelBtn").addEventListener("click", openAdminPanel);
     document.getElementById("closeAdminBtn").addEventListener("click", () => {
       document.getElementById("adminPanel").style.display = "none";
@@ -1086,7 +1067,6 @@
     function loadAdminRooms() {
       const listEl = document.getElementById("adminRoomList");
       listEl.innerHTML = "";
-
       PRESET_ROOMS.forEach(r => {
         const row = document.createElement("div");
         row.className = "admin-row";
@@ -1108,7 +1088,6 @@
         row.appendChild(delBtn);
         listEl.appendChild(row);
       });
-
       db.ref("rooms").once("value", snap => {
         const data = snap.val() || {};
         Object.entries(data).forEach(([id, val]) => {
@@ -1144,7 +1123,6 @@
       document.getElementById("roomTitle").textContent = "Select a room";
     }
 
-    // ── Rooms ─────────────────────────────────────────────────────
     function initRooms() {
       const list = document.getElementById("roomList");
       list.innerHTML = "";
@@ -1187,24 +1165,19 @@
       if (presenceRef)    presenceRef.remove();
       if (msgListener)    db.ref("messages/" + currentRoom).off("child_added", msgListener);
       if (onlineListener) db.ref("presence/" + currentRoom).off("value", onlineListener);
-
       currentRoom = roomId;
-
       document.querySelectorAll(".room-item").forEach(el => {
         el.classList.toggle("active", el.dataset.id === roomId);
       });
-
       document.getElementById("roomTitle").textContent   = roomIcon + " " + roomLabel;
       document.getElementById("noRoom").style.display    = "none";
       document.getElementById("messages").style.display  = "flex";
       document.getElementById("inputArea").style.display = "flex";
       document.getElementById("messages").innerHTML      = "";
       document.getElementById("onlineList").innerHTML    = "";
-
       presenceRef = db.ref("presence/" + roomId + "/" + username);
       presenceRef.set(true);
       presenceRef.onDisconnect().remove();
-
       onlineListener = db.ref("presence/" + roomId).on("value", snap => {
         const data = snap.val() || {};
         const onlineDiv = document.getElementById("onlineList");
@@ -1216,11 +1189,9 @@
           onlineDiv.appendChild(badge);
         });
       });
-
       msgListener = db.ref("messages/" + roomId).limitToLast(100).on("child_added", snap => {
         renderMessage(snap.val(), snap.key);
       });
-
       document.getElementById("messageInput").focus();
     }
 
@@ -1246,8 +1217,7 @@
       const messages = document.getElementById("messages");
       const isSent   = data.sender === username;
       const type     = data.type || "text";
-
-      const bubble = document.createElement("div");
+      const bubble   = document.createElement("div");
       bubble.dataset.key = key;
 
       if (type === "text") {
@@ -1259,7 +1229,6 @@
           bubble.appendChild(label);
         }
         bubble.appendChild(document.createTextNode(data.text));
-
       } else {
         bubble.className = "bubble media-bubble " + (isSent ? "sent" : "received");
         if (!isSent) {
@@ -1268,7 +1237,6 @@
           label.textContent = data.sender;
           bubble.appendChild(label);
         }
-
         if (type === "image") {
           const img = document.createElement("img");
           img.src = data.fileUrl;
