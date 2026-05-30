@@ -17,7 +17,6 @@
       color: #e2e2e2;
     }
 
-    /* ── Auth Screen ── */
     #authScreen {
       position: fixed;
       inset: 0;
@@ -124,7 +123,6 @@
 
     .user-avatar.admin-avatar { background: #f5a623; }
 
-    /* ── Sidebar ── */
     #sidebar {
       width: 260px;
       min-width: 260px;
@@ -192,7 +190,7 @@
       transition: background 0.15s;
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
     }
 
     .room-item:hover { background: #16213e; }
@@ -202,6 +200,8 @@
       font-weight: 600;
       color: #e94560;
     }
+
+    .room-item-label { display: flex; align-items: center; gap: 8px; }
 
     #createRoomArea {
       padding: 12px;
@@ -234,7 +234,6 @@
       font-weight: 700;
     }
 
-    /* ── Main chat ── */
     #main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
 
     #chatHeader {
@@ -387,7 +386,7 @@
       background: #16213e;
       border-radius: 16px;
       padding: 30px;
-      width: 480px;
+      width: 500px;
       max-height: 80vh;
       display: flex;
       flex-direction: column;
@@ -398,17 +397,42 @@
 
     #adminBox h2 { color: #f5a623; font-size: 20px; display: flex; align-items: center; gap: 8px; }
 
+    .admin-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .admin-tab {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #444;
+      border-radius: 8px;
+      background: transparent;
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .admin-tab.active {
+      background: #f5a623;
+      color: #1a1a2e;
+      border-color: #f5a623;
+    }
+
+    .admin-section { display: none; flex-direction: column; gap: 8px; }
+    .admin-section.active { display: flex; }
+
     .admin-section h3 {
       font-size: 13px;
       color: #aaa;
       text-transform: uppercase;
       letter-spacing: 1px;
-      margin-bottom: 10px;
       border-bottom: 1px solid #0f3460;
       padding-bottom: 6px;
     }
 
-    .admin-user-row {
+    .admin-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -417,9 +441,23 @@
       font-size: 14px;
     }
 
-    .admin-user-row:last-child { border-bottom: none; }
+    .admin-row:last-child { border-bottom: none; }
 
-    .delete-user-btn {
+    .admin-row-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .preset-tag {
+      font-size: 11px;
+      background: #0f3460;
+      color: #aaa;
+      border-radius: 6px;
+      padding: 2px 7px;
+    }
+
+    .delete-btn {
       background: #e94560;
       border: none;
       border-radius: 8px;
@@ -429,8 +467,9 @@
       cursor: pointer;
     }
 
-    .delete-user-btn:disabled {
-      background: #444;
+    .delete-btn:disabled {
+      background: #333;
+      color: #666;
       cursor: not-allowed;
     }
 
@@ -449,24 +488,32 @@
 </head>
 <body>
 
-  <!-- Auth Screen -->
   <div id="authScreen">
     <div id="authBox"></div>
   </div>
 
-  <!-- Admin Panel -->
   <div id="adminPanel">
     <div id="adminBox">
       <h2>👑 Admin Panel</h2>
-      <div class="admin-section">
+      <div class="admin-tabs">
+        <button class="admin-tab active" onclick="switchTab('users')">👤 Users</button>
+        <button class="admin-tab" onclick="switchTab('rooms')">💬 Rooms</button>
+      </div>
+
+      <div class="admin-section active" id="tabUsers">
         <h3>Registered Users</h3>
         <div id="adminUserList"></div>
       </div>
+
+      <div class="admin-section" id="tabRooms">
+        <h3>All Rooms</h3>
+        <div id="adminRoomList"></div>
+      </div>
+
       <button id="closeAdminBtn">Close</button>
     </div>
   </div>
 
-  <!-- Sidebar -->
   <div id="sidebar">
     <div id="sidebarHeader">
       <h2>💬 Rooms</h2>
@@ -483,7 +530,6 @@
     </div>
   </div>
 
-  <!-- Main -->
   <div id="main">
     <div id="chatHeader">
       <span id="roomTitle">Select a room</span>
@@ -554,7 +600,7 @@
       }
     });
 
-    // ── Login screen ──────────────────────────────────────────────
+    // ── Login ─────────────────────────────────────────────────────
     function showLoginScreen() {
       document.getElementById("authScreen").style.display = "flex";
       const box = document.getElementById("authBox");
@@ -635,7 +681,7 @@
         });
     }
 
-    // ── Register screen ───────────────────────────────────────────
+    // ── Register ──────────────────────────────────────────────────
     function showRegisterScreen() {
       const box = document.getElementById("authBox");
       box.innerHTML = `
@@ -661,20 +707,18 @@
       const confirm  = document.getElementById("regConfirm").value;
       const errEl    = document.getElementById("authError");
 
-      if (!name)                return errEl.textContent = "Please enter a display name.";
-      if (name === ADMIN_NAME)  return errEl.textContent = "That name is reserved.";
-      if (password.length < 6)  return errEl.textContent = "Password must be at least 6 characters.";
-      if (password !== confirm)  return errEl.textContent = "Passwords do not match.";
+      if (!name)               return errEl.textContent = "Please enter a display name.";
+      if (name === ADMIN_NAME) return errEl.textContent = "That name is reserved.";
+      if (password.length < 6) return errEl.textContent = "Password must be at least 6 characters.";
+      if (password !== confirm) return errEl.textContent = "Passwords do not match.";
 
       const email = name.toLowerCase().replace(/\s+/g, "") + "@chat.app";
 
       auth.createUserWithEmailAndPassword(email, password)
-        .then(cred => {
-          return Promise.all([
-            db.ref("users/" + cred.user.uid + "/name").set(name),
-            db.ref("usernames/" + name).set(email)
-          ]);
-        })
+        .then(cred => Promise.all([
+          db.ref("users/" + cred.user.uid + "/name").set(name),
+          db.ref("usernames/" + name).set(email)
+        ]))
         .catch(err => {
           if (err.code === "auth/email-already-in-use") {
             errEl.textContent = "That name is already taken.";
@@ -696,8 +740,23 @@
       document.getElementById("adminPanel").style.display = "none";
     });
 
+    function switchTab(tab) {
+      document.querySelectorAll(".admin-tab").forEach((t, i) => {
+        t.classList.toggle("active", (i === 0 && tab === "users") || (i === 1 && tab === "rooms"));
+      });
+      document.getElementById("tabUsers").classList.toggle("active", tab === "users");
+      document.getElementById("tabRooms").classList.toggle("active", tab === "rooms");
+    }
+
+    window.switchTab = switchTab;
+
     function openAdminPanel() {
       document.getElementById("adminPanel").style.display = "flex";
+      loadAdminUsers();
+      loadAdminRooms();
+    }
+
+    function loadAdminUsers() {
       const listEl = document.getElementById("adminUserList");
       listEl.innerHTML = "<p style='color:#666;font-size:13px;'>Loading...</p>";
 
@@ -707,20 +766,19 @@
 
         Object.entries(data).forEach(([name, email]) => {
           const row = document.createElement("div");
-          row.className = "admin-user-row";
+          row.className = "admin-row";
 
-          const nameSpan = document.createElement("span");
-          nameSpan.textContent = name + (name === ADMIN_NAME ? " 👑" : "");
+          const label = document.createElement("span");
+          label.textContent = name + (name === ADMIN_NAME ? " 👑" : "");
 
           const delBtn = document.createElement("button");
-          delBtn.className = "delete-user-btn";
-          delBtn.textContent = "Delete Account";
+          delBtn.className = "delete-btn";
+          delBtn.textContent = "Delete";
           delBtn.disabled = (name === ADMIN_NAME);
 
           delBtn.addEventListener("click", () => {
             if (!confirm("Delete account for " + name + "? This cannot be undone.")) return;
             db.ref("usernames/" + name).remove();
-            // Remove their messages across all rooms
             db.ref("messages").once("value", msgSnap => {
               msgSnap.forEach(roomSnap => {
                 roomSnap.forEach(msgSnap2 => {
@@ -731,7 +789,88 @@
             row.remove();
           });
 
-          row.appendChild(nameSpan);
+          row.appendChild(label);
+          row.appendChild(delBtn);
+          listEl.appendChild(row);
+        });
+      });
+    }
+
+    function loadAdminRooms() {
+      const listEl = document.getElementById("adminRoomList");
+      listEl.innerHTML = "<p style='color:#666;font-size:13px;'>Loading...</p>";
+
+      // Show preset rooms first
+      listEl.innerHTML = "";
+      PRESET_ROOMS.forEach(r => {
+        const row = document.createElement("div");
+        row.className = "admin-row";
+
+        const label = document.createElement("div");
+        label.className = "admin-row-label";
+        label.innerHTML = `${r.icon} ${r.label} <span class="preset-tag">preset</span>`;
+
+        const delBtn = document.createElement("button");
+        delBtn.className = "delete-btn";
+        delBtn.textContent = "Delete";
+        delBtn.addEventListener("click", () => {
+          if (!confirm("Delete the " + r.label + " room and all its messages? This cannot be undone.")) return;
+          db.ref("messages/" + r.id).remove();
+          db.ref("presence/" + r.id).remove();
+          if (currentRoom === r.id) {
+            currentRoom = null;
+            document.getElementById("noRoom").style.display = "flex";
+            document.getElementById("messages").style.display = "none";
+            document.getElementById("inputArea").style.display = "none";
+            document.getElementById("roomTitle").textContent = "Select a room";
+          }
+          // Remove from sidebar
+          document.querySelectorAll(".room-item").forEach(el => {
+            if (el.dataset.id === r.id) el.remove();
+          });
+          row.remove();
+        });
+
+        row.appendChild(label);
+        row.appendChild(delBtn);
+        listEl.appendChild(row);
+      });
+
+      // Custom rooms
+      db.ref("rooms").once("value", snap => {
+        const data = snap.val() || {};
+        if (Object.keys(data).length === 0) return;
+
+        Object.entries(data).forEach(([id, val]) => {
+          const row = document.createElement("div");
+          row.className = "admin-row";
+
+          const label = document.createElement("div");
+          label.className = "admin-row-label";
+          label.innerHTML = `💬 ${val.label}`;
+
+          const delBtn = document.createElement("button");
+          delBtn.className = "delete-btn";
+          delBtn.textContent = "Delete";
+          delBtn.addEventListener("click", () => {
+            if (!confirm("Delete the " + val.label + " room and all its messages? This cannot be undone.")) return;
+            db.ref("rooms/" + id).remove();
+            db.ref("messages/" + id).remove();
+            db.ref("presence/" + id).remove();
+            if (currentRoom === id) {
+              currentRoom = null;
+              document.getElementById("noRoom").style.display = "flex";
+              document.getElementById("messages").style.display = "none";
+              document.getElementById("inputArea").style.display = "none";
+              document.getElementById("roomTitle").textContent = "Select a room";
+            }
+            document.querySelectorAll(".room-item").forEach(el => {
+              if (el.dataset.id === id) el.remove();
+            });
+            row.remove();
+          });
+
+          row.appendChild(label);
           row.appendChild(delBtn);
           listEl.appendChild(row);
         });
@@ -760,7 +899,7 @@
       const item = document.createElement("div");
       item.className = "room-item" + (isCustom ? " custom" : "");
       item.dataset.id = id;
-      item.innerHTML = `<span>${icon}</span>${label}`;
+      item.innerHTML = `<div class="room-item-label"><span>${icon}</span>${label}</div>`;
       item.addEventListener("click", () => joinRoom(id, label, icon));
       list.appendChild(item);
     }
@@ -793,7 +932,7 @@
         el.classList.toggle("active", el.dataset.id === roomId);
       });
 
-      document.getElementById("roomTitle").textContent = roomIcon + " " + roomLabel;
+      document.getElementById("roomTitle").textContent  = roomIcon + " " + roomLabel;
       document.getElementById("noRoom").style.display   = "none";
       document.getElementById("messages").style.display = "flex";
       document.getElementById("inputArea").style.display = "flex";
@@ -857,7 +996,6 @@
 
       bubble.appendChild(document.createTextNode(data.text));
 
-      // Admin delete button on every message
       if (isAdmin) {
         const delBtn = document.createElement("button");
         delBtn.className = "delete-msg-btn";
@@ -873,18 +1011,6 @@
       messages.appendChild(bubble);
       messages.scrollTop = messages.scrollHeight;
     }
-
-    // ── Create admin account on first load if it doesn't exist ────
-    db.ref("usernames/" + ADMIN_NAME).once("value", snap => {
-      if (!snap.exists()) {
-        auth.createUserWithEmailAndPassword(ADMIN_EMAIL, "jk249")
-          .then(cred => Promise.all([
-            db.ref("users/" + cred.user.uid + "/name").set(ADMIN_NAME),
-            db.ref("usernames/" + ADMIN_NAME).set(ADMIN_EMAIL)
-          ]))
-          .catch(() => {});
-      }
-    });
   </script>
 
 </body>
