@@ -165,7 +165,7 @@
     }
 
     #currentUserLabel span { color: #e2e2e2; font-weight: 600; }
-    .admin-crown { color: #f5a623; font-size: 14px; }
+    .admin-crown { color: #f5a623; }
 
     #adminPanelBtn {
       margin: 8px 12px 0;
@@ -310,7 +310,47 @@
       border-bottom-left-radius: 4px;
     }
 
-    .bubble .sender { font-size: 11px; opacity: 0.7; margin-bottom: 4px; }
+    .bubble.media-bubble {
+      padding: 6px;
+      background: transparent;
+    }
+
+    .bubble.media-bubble.sent  { align-self: flex-end; }
+    .bubble.media-bubble.received { align-self: flex-start; }
+
+    .bubble .sender { font-size: 11px; opacity: 0.7; margin-bottom: 4px; padding: 0 4px; }
+
+    .bubble img {
+      max-width: 280px;
+      max-height: 280px;
+      border-radius: 12px;
+      display: block;
+      cursor: pointer;
+      object-fit: cover;
+    }
+
+    .bubble video {
+      max-width: 280px;
+      border-radius: 12px;
+      display: block;
+    }
+
+    .file-attachment {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #0f3460;
+      border-radius: 12px;
+      padding: 10px 14px;
+      text-decoration: none;
+      color: #e2e2e2;
+      font-size: 13px;
+      max-width: 240px;
+    }
+
+    .file-attachment.sent-file { background: rgba(255,255,255,0.15); }
+    .file-icon { font-size: 24px; }
+    .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
 
     .delete-msg-btn {
       position: absolute;
@@ -328,15 +368,43 @@
     .bubble:hover .delete-msg-btn { display: block; }
     .delete-msg-btn:hover { color: #e94560; }
 
+    #uploadProgress {
+      background: #0f3460;
+      padding: 6px 20px;
+      font-size: 12px;
+      color: #aaa;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      border-top: 1px solid #1a1a2e;
+    }
+
+    .progress-bar-wrap {
+      flex: 1;
+      background: #16213e;
+      border-radius: 4px;
+      height: 6px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: #e94560;
+      border-radius: 4px;
+      width: 0%;
+      transition: width 0.2s;
+    }
+
     .input-area {
       display: flex;
       padding: 14px 20px;
       background: #0f3460;
       gap: 10px;
       border-top: 2px solid #e94560;
+      align-items: center;
     }
 
-    .input-area input {
+    .input-area input[type="text"] {
       flex: 1;
       border: none;
       border-radius: 24px;
@@ -347,9 +415,27 @@
       outline: none;
     }
 
-    .input-area input::placeholder { color: #888; }
+    .input-area input[type="text"]::placeholder { color: #888; }
 
-    .input-area button {
+    #fileBtn {
+      background: #16213e;
+      border: none;
+      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    #fileBtn:hover { background: #e94560; color: white; }
+    #fileInput { display: none; }
+
+    #sendBtn {
       background: #e94560;
       border: none;
       border-radius: 50%;
@@ -358,9 +444,10 @@
       color: white;
       font-size: 20px;
       cursor: pointer;
+      flex-shrink: 0;
     }
 
-    .input-area button:hover { background: #c73652; }
+    #sendBtn:hover { background: #c73652; }
 
     #noRoom {
       flex: 1;
@@ -371,7 +458,26 @@
       font-size: 16px;
     }
 
-    /* ── Admin Panel ── */
+    /* Lightbox */
+    #lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 50;
+      cursor: zoom-out;
+    }
+
+    #lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+
+    /* Admin Panel */
     #adminPanel {
       position: fixed;
       inset: 0;
@@ -395,12 +501,9 @@
       overflow-y: auto;
     }
 
-    #adminBox h2 { color: #f5a623; font-size: 20px; display: flex; align-items: center; gap: 8px; }
+    #adminBox h2 { color: #f5a623; font-size: 20px; }
 
-    .admin-tabs {
-      display: flex;
-      gap: 8px;
-    }
+    .admin-tabs { display: flex; gap: 8px; }
 
     .admin-tab {
       flex: 1;
@@ -414,11 +517,7 @@
       font-weight: 600;
     }
 
-    .admin-tab.active {
-      background: #f5a623;
-      color: #1a1a2e;
-      border-color: #f5a623;
-    }
+    .admin-tab.active { background: #f5a623; color: #1a1a2e; border-color: #f5a623; }
 
     .admin-section { display: none; flex-direction: column; gap: 8px; }
     .admin-section.active { display: flex; }
@@ -442,12 +541,7 @@
     }
 
     .admin-row:last-child { border-bottom: none; }
-
-    .admin-row-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .admin-row-label { display: flex; align-items: center; gap: 8px; }
 
     .preset-tag {
       font-size: 11px;
@@ -467,11 +561,7 @@
       cursor: pointer;
     }
 
-    .delete-btn:disabled {
-      background: #333;
-      color: #666;
-      cursor: not-allowed;
-    }
+    .delete-btn:disabled { background: #333; color: #666; cursor: not-allowed; }
 
     #closeAdminBtn {
       background: transparent;
@@ -488,8 +578,10 @@
 </head>
 <body>
 
-  <div id="authScreen">
-    <div id="authBox"></div>
+  <div id="authScreen"><div id="authBox"></div></div>
+
+  <div id="lightbox">
+    <img id="lightboxImg" src="" alt="Full size" />
   </div>
 
   <div id="adminPanel">
@@ -499,17 +591,14 @@
         <button class="admin-tab active" onclick="switchTab('users')">👤 Users</button>
         <button class="admin-tab" onclick="switchTab('rooms')">💬 Rooms</button>
       </div>
-
       <div class="admin-section active" id="tabUsers">
         <h3>Registered Users</h3>
         <div id="adminUserList"></div>
       </div>
-
       <div class="admin-section" id="tabRooms">
         <h3>All Rooms</h3>
         <div id="adminRoomList"></div>
       </div>
-
       <button id="closeAdminBtn">Close</button>
     </div>
   </div>
@@ -519,9 +608,7 @@
       <h2>💬 Rooms</h2>
       <button id="logoutBtn">Log out</button>
     </div>
-    <div id="currentUserLabel">
-      Signed in as <span id="currentUserSpan"></span>
-    </div>
+    <div id="currentUserLabel">Signed in as <span id="currentUserSpan"></span></div>
     <button id="adminPanelBtn">👑 Admin Panel</button>
     <div id="roomList"></div>
     <div id="createRoomArea">
@@ -538,7 +625,15 @@
     <div class="warning-banner">⚠️ Messages are public and stored in plain text — do not send personal information.</div>
     <div id="noRoom">← Select or create a room to start chatting</div>
     <div id="messages" style="display:none;"></div>
+    <div id="uploadProgress">
+      <span id="uploadLabel">Uploading...</span>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progressFill"></div>
+      </div>
+    </div>
     <div class="input-area" id="inputArea" style="display:none;">
+      <button id="fileBtn" title="Attach file">📎</button>
+      <input type="file" id="fileInput" accept="image/*,video/*,.pdf,.doc,.docx,.txt,.zip" />
       <input type="text" id="messageInput" placeholder="Type a message..." />
       <button id="sendBtn">➤</button>
     </div>
@@ -563,6 +658,11 @@
     const db   = firebase.database();
     const auth = firebase.auth();
 
+    // ── Cloudinary config ─────────────────────────────────────────
+    const CLOUDINARY_CLOUD  = "dlsay1dy5";
+    const CLOUDINARY_PRESET = "chat_uploads";
+    const CLOUDINARY_URL    = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/upload`;
+
     const ADMIN_NAME  = "Brandon";
     const ADMIN_EMAIL = "brandon@chat.app";
 
@@ -580,7 +680,7 @@
     let msgListener    = null;
     let onlineListener = null;
 
-    // ── Auth state ────────────────────────────────────────────────
+    // ── Auth ──────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
       if (user) {
         db.ref("users/" + user.uid + "/name").once("value", snap => {
@@ -625,12 +725,10 @@
         const data = snap.val() || {};
         const list = document.getElementById("userList");
         list.innerHTML = "";
-
         if (Object.keys(data).length === 0) {
           list.innerHTML = `<p style="color:#666;font-size:13px;text-align:center;">No accounts yet — create one below.</p>`;
           return;
         }
-
         Object.entries(data).forEach(([name, email]) => {
           const isAdminUser = name === ADMIN_NAME;
           const btn = document.createElement("button");
@@ -638,9 +736,7 @@
           btn.innerHTML = `
             <div class="user-avatar ${isAdminUser ? "admin-avatar" : ""}">
               ${isAdminUser ? "👑" : name.charAt(0).toUpperCase()}
-            </div>
-            ${name}
-          `;
+            </div>${name}`;
           btn.addEventListener("click", () => selectUser(name, email, btn));
           list.appendChild(btn);
         });
@@ -653,13 +749,11 @@
       selectedEmail = email;
       document.querySelectorAll(".user-btn").forEach(b => b.classList.remove("selected"));
       btnEl.classList.add("selected");
-
       const section = document.getElementById("passwordSection");
       section.style.display = "flex";
       document.getElementById("goRegisterBtn").style.display = "none";
       document.getElementById("authError").textContent = "";
       document.getElementById("loginPassword").focus();
-
       document.getElementById("loginConfirmBtn").onclick = () => signIn(email);
       document.getElementById("backBtn").onclick = () => {
         section.style.display = "none";
@@ -706,25 +800,19 @@
       const password = document.getElementById("regPassword").value;
       const confirm  = document.getElementById("regConfirm").value;
       const errEl    = document.getElementById("authError");
-
       if (!name)               return errEl.textContent = "Please enter a display name.";
       if (name === ADMIN_NAME) return errEl.textContent = "That name is reserved.";
       if (password.length < 6) return errEl.textContent = "Password must be at least 6 characters.";
       if (password !== confirm) return errEl.textContent = "Passwords do not match.";
-
       const email = name.toLowerCase().replace(/\s+/g, "") + "@chat.app";
-
       auth.createUserWithEmailAndPassword(email, password)
         .then(cred => Promise.all([
           db.ref("users/" + cred.user.uid + "/name").set(name),
           db.ref("usernames/" + name).set(email)
         ]))
         .catch(err => {
-          if (err.code === "auth/email-already-in-use") {
-            errEl.textContent = "That name is already taken.";
-          } else {
-            errEl.textContent = err.message;
-          }
+          errEl.textContent = err.code === "auth/email-already-in-use"
+            ? "That name is already taken." : err.message;
         });
     }
 
@@ -733,6 +821,94 @@
       if (presenceRef) presenceRef.remove();
       auth.signOut();
     });
+
+    // ── Lightbox ──────────────────────────────────────────────────
+    const lightbox = document.getElementById("lightbox");
+    lightbox.addEventListener("click", () => lightbox.style.display = "none");
+    function openLightbox(src) {
+      document.getElementById("lightboxImg").src = src;
+      lightbox.style.display = "flex";
+    }
+
+    // ── File upload via Cloudinary ────────────────────────────────
+    document.getElementById("fileBtn").addEventListener("click", () => {
+      document.getElementById("fileInput").click();
+    });
+
+    document.getElementById("fileInput").addEventListener("change", async e => {
+      const file = e.target.files[0];
+      if (!file || !currentRoom) return;
+
+      const maxSize = 100 * 1024 * 1024; // 100MB
+      if (file.size > maxSize) {
+        alert("File is too large. Maximum size is 100MB.");
+        e.target.value = "";
+        return;
+      }
+
+      const progressBar  = document.getElementById("uploadProgress");
+      const progressFill = document.getElementById("progressFill");
+      const uploadLabel  = document.getElementById("uploadLabel");
+
+      progressBar.style.display = "flex";
+      uploadLabel.textContent   = "Uploading " + file.name + "...";
+      progressFill.style.width  = "0%";
+
+      try {
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", CLOUDINARY_PRESET);
+
+        // Simulate progress since fetch doesn't support it
+        let fakeProgress = 0;
+        const fakeInterval = setInterval(() => {
+          fakeProgress = Math.min(fakeProgress + 8, 85);
+          progressFill.style.width = fakeProgress + "%";
+        }, 200);
+
+        const res  = await fetch(CLOUDINARY_URL, { method: "POST", body: formData });
+        const data = await res.json();
+
+        clearInterval(fakeInterval);
+        progressFill.style.width = "100%";
+
+        if (data.error) throw new Error(data.error.message);
+
+        const type = getFileType(file.type);
+
+        await db.ref("messages/" + currentRoom).push({
+          sender:    username,
+          type:      type,
+          fileName:  file.name,
+          fileUrl:   data.secure_url,
+          timestamp: Date.now()
+        });
+
+      } catch (err) {
+        console.error(err);
+        alert("Upload failed: " + err.message);
+      } finally {
+        progressBar.style.display = "none";
+        progressFill.style.width  = "0%";
+        e.target.value = "";
+      }
+    });
+
+    function getFileType(mimeType) {
+      if (mimeType.startsWith("image/")) return "image";
+      if (mimeType.startsWith("video/")) return "video";
+      return "file";
+    }
+
+    function getFileIcon(fileName) {
+      const ext = fileName.split(".").pop().toLowerCase();
+      if (ext === "pdf")                       return "📄";
+      if (["doc","docx"].includes(ext))        return "📝";
+      if (["xls","xlsx"].includes(ext))        return "📊";
+      if (["zip","rar","7z"].includes(ext))    return "🗜️";
+      if (["txt","md"].includes(ext))          return "📃";
+      return "📎";
+    }
 
     // ── Admin panel ───────────────────────────────────────────────
     document.getElementById("adminPanelBtn").addEventListener("click", openAdminPanel);
@@ -747,7 +923,6 @@
       document.getElementById("tabUsers").classList.toggle("active", tab === "users");
       document.getElementById("tabRooms").classList.toggle("active", tab === "rooms");
     }
-
     window.switchTab = switchTab;
 
     function openAdminPanel() {
@@ -759,36 +934,28 @@
     function loadAdminUsers() {
       const listEl = document.getElementById("adminUserList");
       listEl.innerHTML = "<p style='color:#666;font-size:13px;'>Loading...</p>";
-
       db.ref("usernames").once("value", snap => {
         const data = snap.val() || {};
         listEl.innerHTML = "";
-
         Object.entries(data).forEach(([name, email]) => {
           const row = document.createElement("div");
           row.className = "admin-row";
-
           const label = document.createElement("span");
           label.textContent = name + (name === ADMIN_NAME ? " 👑" : "");
-
           const delBtn = document.createElement("button");
           delBtn.className = "delete-btn";
           delBtn.textContent = "Delete";
           delBtn.disabled = (name === ADMIN_NAME);
-
           delBtn.addEventListener("click", () => {
-            if (!confirm("Delete account for " + name + "? This cannot be undone.")) return;
+            if (!confirm("Delete account for " + name + "?")) return;
             db.ref("usernames/" + name).remove();
             db.ref("messages").once("value", msgSnap => {
               msgSnap.forEach(roomSnap => {
-                roomSnap.forEach(msgSnap2 => {
-                  if (msgSnap2.val().sender === name) msgSnap2.ref.remove();
-                });
+                roomSnap.forEach(m => { if (m.val().sender === name) m.ref.remove(); });
               });
             });
             row.remove();
           });
-
           row.appendChild(label);
           row.appendChild(delBtn);
           listEl.appendChild(row);
@@ -798,78 +965,50 @@
 
     function loadAdminRooms() {
       const listEl = document.getElementById("adminRoomList");
-      listEl.innerHTML = "<p style='color:#666;font-size:13px;'>Loading...</p>";
-
-      // Show preset rooms first
       listEl.innerHTML = "";
+
       PRESET_ROOMS.forEach(r => {
         const row = document.createElement("div");
         row.className = "admin-row";
-
         const label = document.createElement("div");
         label.className = "admin-row-label";
         label.innerHTML = `${r.icon} ${r.label} <span class="preset-tag">preset</span>`;
-
         const delBtn = document.createElement("button");
         delBtn.className = "delete-btn";
         delBtn.textContent = "Delete";
         delBtn.addEventListener("click", () => {
-          if (!confirm("Delete the " + r.label + " room and all its messages? This cannot be undone.")) return;
+          if (!confirm("Delete " + r.label + " and all its messages?")) return;
           db.ref("messages/" + r.id).remove();
           db.ref("presence/" + r.id).remove();
-          if (currentRoom === r.id) {
-            currentRoom = null;
-            document.getElementById("noRoom").style.display = "flex";
-            document.getElementById("messages").style.display = "none";
-            document.getElementById("inputArea").style.display = "none";
-            document.getElementById("roomTitle").textContent = "Select a room";
-          }
-          // Remove from sidebar
-          document.querySelectorAll(".room-item").forEach(el => {
-            if (el.dataset.id === r.id) el.remove();
-          });
+          if (currentRoom === r.id) resetChatView();
+          document.querySelectorAll(".room-item").forEach(el => { if (el.dataset.id === r.id) el.remove(); });
           row.remove();
         });
-
         row.appendChild(label);
         row.appendChild(delBtn);
         listEl.appendChild(row);
       });
 
-      // Custom rooms
       db.ref("rooms").once("value", snap => {
         const data = snap.val() || {};
-        if (Object.keys(data).length === 0) return;
-
         Object.entries(data).forEach(([id, val]) => {
           const row = document.createElement("div");
           row.className = "admin-row";
-
           const label = document.createElement("div");
           label.className = "admin-row-label";
           label.innerHTML = `💬 ${val.label}`;
-
           const delBtn = document.createElement("button");
           delBtn.className = "delete-btn";
           delBtn.textContent = "Delete";
           delBtn.addEventListener("click", () => {
-            if (!confirm("Delete the " + val.label + " room and all its messages? This cannot be undone.")) return;
+            if (!confirm("Delete " + val.label + " and all its messages?")) return;
             db.ref("rooms/" + id).remove();
             db.ref("messages/" + id).remove();
             db.ref("presence/" + id).remove();
-            if (currentRoom === id) {
-              currentRoom = null;
-              document.getElementById("noRoom").style.display = "flex";
-              document.getElementById("messages").style.display = "none";
-              document.getElementById("inputArea").style.display = "none";
-              document.getElementById("roomTitle").textContent = "Select a room";
-            }
-            document.querySelectorAll(".room-item").forEach(el => {
-              if (el.dataset.id === id) el.remove();
-            });
+            if (currentRoom === id) resetChatView();
+            document.querySelectorAll(".room-item").forEach(el => { if (el.dataset.id === id) el.remove(); });
             row.remove();
           });
-
           row.appendChild(label);
           row.appendChild(delBtn);
           listEl.appendChild(row);
@@ -877,19 +1016,24 @@
       });
     }
 
+    function resetChatView() {
+      currentRoom = null;
+      document.getElementById("noRoom").style.display = "flex";
+      document.getElementById("messages").style.display = "none";
+      document.getElementById("inputArea").style.display = "none";
+      document.getElementById("roomTitle").textContent = "Select a room";
+    }
+
     // ── Rooms ─────────────────────────────────────────────────────
     function initRooms() {
       const list = document.getElementById("roomList");
       list.innerHTML = "";
       PRESET_ROOMS.forEach(r => addRoomToSidebar(r.id, r.label, r.icon));
-
       db.ref("rooms").on("value", snap => {
         const data = snap.val() || {};
         document.querySelectorAll(".room-item.custom").forEach(el => el.remove());
         Object.keys(data).forEach(id => {
-          if (!PRESET_ROOMS.find(r => r.id === id)) {
-            addRoomToSidebar(id, data[id].label, "💬", true);
-          }
+          if (!PRESET_ROOMS.find(r => r.id === id)) addRoomToSidebar(id, data[id].label, "💬", true);
         });
       });
     }
@@ -905,9 +1049,7 @@
     }
 
     document.getElementById("createRoomBtn").addEventListener("click", createRoom);
-    document.getElementById("newRoomInput").addEventListener("keydown", e => {
-      if (e.key === "Enter") createRoom();
-    });
+    document.getElementById("newRoomInput").addEventListener("keydown", e => { if (e.key === "Enter") createRoom(); });
 
     function createRoom() {
       const input = document.getElementById("newRoomInput");
@@ -932,12 +1074,12 @@
         el.classList.toggle("active", el.dataset.id === roomId);
       });
 
-      document.getElementById("roomTitle").textContent  = roomIcon + " " + roomLabel;
-      document.getElementById("noRoom").style.display   = "none";
-      document.getElementById("messages").style.display = "flex";
+      document.getElementById("roomTitle").textContent   = roomIcon + " " + roomLabel;
+      document.getElementById("noRoom").style.display    = "none";
+      document.getElementById("messages").style.display  = "flex";
       document.getElementById("inputArea").style.display = "flex";
-      document.getElementById("messages").innerHTML = "";
-      document.getElementById("onlineList").innerHTML = "";
+      document.getElementById("messages").innerHTML      = "";
+      document.getElementById("onlineList").innerHTML    = "";
 
       presenceRef = db.ref("presence/" + roomId + "/" + username);
       presenceRef.set(true);
@@ -962,12 +1104,14 @@
       document.getElementById("messageInput").focus();
     }
 
+    // ── Send text ─────────────────────────────────────────────────
     function sendMessage() {
       const input = document.getElementById("messageInput");
-      const text = input.value.trim();
+      const text  = input.value.trim();
       if (!text || !username || !currentRoom) return;
       db.ref("messages/" + currentRoom).push({
         sender: username,
+        type:   "text",
         text,
         timestamp: Date.now()
       });
@@ -979,28 +1123,66 @@
       if (e.key === "Enter") sendMessage();
     });
 
+    // ── Render message ────────────────────────────────────────────
     function renderMessage(data, key) {
       const messages = document.getElementById("messages");
       const isSent   = data.sender === username;
+      const type     = data.type || "text";
 
       const bubble = document.createElement("div");
-      bubble.className = "bubble " + (isSent ? "sent" : "received");
       bubble.dataset.key = key;
 
-      if (!isSent) {
-        const label = document.createElement("div");
-        label.className = "sender";
-        label.textContent = data.sender;
-        bubble.appendChild(label);
-      }
+      if (type === "text") {
+        bubble.className = "bubble " + (isSent ? "sent" : "received");
+        if (!isSent) {
+          const label = document.createElement("div");
+          label.className = "sender";
+          label.textContent = data.sender;
+          bubble.appendChild(label);
+        }
+        bubble.appendChild(document.createTextNode(data.text));
 
-      bubble.appendChild(document.createTextNode(data.text));
+      } else {
+        bubble.className = "bubble media-bubble " + (isSent ? "sent" : "received");
+        if (!isSent) {
+          const label = document.createElement("div");
+          label.className = "sender";
+          label.textContent = data.sender;
+          bubble.appendChild(label);
+        }
+
+        if (type === "image") {
+          const img = document.createElement("img");
+          img.src = data.fileUrl;
+          img.alt = data.fileName;
+          img.addEventListener("click", () => openLightbox(data.fileUrl));
+          bubble.appendChild(img);
+
+        } else if (type === "video") {
+          const video = document.createElement("video");
+          video.src      = data.fileUrl;
+          video.controls = true;
+          bubble.appendChild(video);
+
+        } else {
+          const link = document.createElement("a");
+          link.href      = data.fileUrl;
+          link.target    = "_blank";
+          link.className = "file-attachment" + (isSent ? " sent-file" : "");
+          link.innerHTML = `
+            <span class="file-icon">${getFileIcon(data.fileName)}</span>
+            <span class="file-name">${data.fileName}</span>
+            <span class="file-download">⬇</span>
+          `;
+          bubble.appendChild(link);
+        }
+      }
 
       if (isAdmin) {
         const delBtn = document.createElement("button");
-        delBtn.className = "delete-msg-btn";
+        delBtn.className   = "delete-msg-btn";
         delBtn.textContent = "✕";
-        delBtn.title = "Delete message";
+        delBtn.title       = "Delete message";
         delBtn.addEventListener("click", () => {
           db.ref("messages/" + currentRoom + "/" + key).remove();
           bubble.remove();
