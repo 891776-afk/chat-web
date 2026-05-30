@@ -138,11 +138,12 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 6px;
     }
 
     #sidebarHeader h2 { font-size: 18px; font-weight: 700; color: #e94560; }
 
-    #logoutBtn {
+    #logoutBtn, #changePassBtn {
       background: transparent;
       border: 1px solid #444;
       border-radius: 8px;
@@ -152,7 +153,7 @@
       cursor: pointer;
     }
 
-    #logoutBtn:hover { border-color: #e94560; color: #e94560; }
+    #logoutBtn:hover, #changePassBtn:hover { border-color: #e94560; color: #e94560; }
 
     #currentUserLabel {
       padding: 8px 16px 12px;
@@ -310,11 +311,7 @@
       border-bottom-left-radius: 4px;
     }
 
-    .bubble.media-bubble {
-      padding: 6px;
-      background: transparent;
-    }
-
+    .bubble.media-bubble { padding: 6px; background: transparent; }
     .bubble.media-bubble.sent  { align-self: flex-end; }
     .bubble.media-bubble.received { align-self: flex-start; }
 
@@ -477,6 +474,70 @@
       object-fit: contain;
     }
 
+    /* Change Password */
+    #changePassOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 40;
+    }
+
+    #changePassBox {
+      background: #16213e;
+      border-radius: 16px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 320px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    #changePassBox h2 { color: #e94560; font-size: 20px; }
+
+    #changePassBox input {
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      background: #0f3460;
+      color: #e2e2e2;
+      font-size: 15px;
+      outline: none;
+      width: 100%;
+    }
+
+    #changePassBox input::placeholder { color: #666; }
+
+    #changePassBox button.primary {
+      background: #e94560;
+      border: none;
+      border-radius: 10px;
+      padding: 12px;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    #changePassBox button.secondary {
+      background: transparent;
+      border: 1px solid #444;
+      border-radius: 10px;
+      padding: 10px;
+      color: #aaa;
+      font-size: 13px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    #changePassBox button.secondary:hover { border-color: #e94560; color: #e94560; }
+    #changePassError   { color: #e94560; font-size: 13px; text-align: center; min-height: 18px; }
+    #changePassSuccess { color: #4caf50; font-size: 13px; text-align: center; min-height: 18px; }
+
     /* Admin Panel */
     #adminPanel {
       position: fixed;
@@ -584,6 +645,19 @@
     <img id="lightboxImg" src="" alt="Full size" />
   </div>
 
+  <div id="changePassOverlay">
+    <div id="changePassBox">
+      <h2>🔑 Change Password</h2>
+      <input type="password" id="currentPass" placeholder="Current password..." />
+      <input type="password" id="newPass"     placeholder="New password..." />
+      <input type="password" id="confirmPass" placeholder="Confirm new password..." />
+      <div id="changePassError"></div>
+      <div id="changePassSuccess"></div>
+      <button class="primary"   id="confirmChangeBtn">Change Password</button>
+      <button class="secondary" id="cancelChangeBtn">Cancel</button>
+    </div>
+  </div>
+
   <div id="adminPanel">
     <div id="adminBox">
       <h2>👑 Admin Panel</h2>
@@ -606,6 +680,7 @@
   <div id="sidebar">
     <div id="sidebarHeader">
       <h2>💬 Rooms</h2>
+      <button id="changePassBtn">🔑</button>
       <button id="logoutBtn">Log out</button>
     </div>
     <div id="currentUserLabel">Signed in as <span id="currentUserSpan"></span></div>
@@ -658,7 +733,6 @@
     const db   = firebase.database();
     const auth = firebase.auth();
 
-    // ── Cloudinary config ─────────────────────────────────────────
     const CLOUDINARY_CLOUD  = "dlsay1dy5";
     const CLOUDINARY_PRESET = "chat_uploads";
     const CLOUDINARY_URL    = `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/upload`;
@@ -822,6 +896,56 @@
       auth.signOut();
     });
 
+    // ── Change Password ───────────────────────────────────────────
+    document.getElementById("changePassBtn").addEventListener("click", () => {
+      document.getElementById("changePassOverlay").style.display = "flex";
+      document.getElementById("currentPass").value  = "";
+      document.getElementById("newPass").value      = "";
+      document.getElementById("confirmPass").value  = "";
+      document.getElementById("changePassError").textContent   = "";
+      document.getElementById("changePassSuccess").textContent = "";
+      document.getElementById("currentPass").focus();
+    });
+
+    document.getElementById("cancelChangeBtn").addEventListener("click", () => {
+      document.getElementById("changePassOverlay").style.display = "none";
+    });
+
+    document.getElementById("confirmChangeBtn").addEventListener("click", () => {
+      const current = document.getElementById("currentPass").value;
+      const newPass  = document.getElementById("newPass").value;
+      const confirm  = document.getElementById("confirmPass").value;
+      const errEl    = document.getElementById("changePassError");
+      const sucEl    = document.getElementById("changePassSuccess");
+
+      errEl.textContent = "";
+      sucEl.textContent = "";
+
+      if (!current)           return errEl.textContent = "Please enter your current password.";
+      if (newPass.length < 6) return errEl.textContent = "New password must be at least 6 characters.";
+      if (newPass !== confirm) return errEl.textContent = "Passwords do not match.";
+
+      const user       = auth.currentUser;
+      const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
+
+      user.reauthenticateWithCredential(credential)
+        .then(() => user.updatePassword(newPass))
+        .then(() => {
+          sucEl.textContent = "Password changed successfully.";
+          setTimeout(() => {
+            document.getElementById("changePassOverlay").style.display = "none";
+          }, 1500);
+        })
+        .catch(err => {
+          errEl.textContent = err.code === "auth/wrong-password"
+            ? "Current password is incorrect." : err.message;
+        });
+    });
+
+    document.getElementById("confirmPass").addEventListener("keydown", e => {
+      if (e.key === "Enter") document.getElementById("confirmChangeBtn").click();
+    });
+
     // ── Lightbox ──────────────────────────────────────────────────
     const lightbox = document.getElementById("lightbox");
     lightbox.addEventListener("click", () => lightbox.style.display = "none");
@@ -839,7 +963,7 @@
       const file = e.target.files[0];
       if (!file || !currentRoom) return;
 
-      const maxSize = 100 * 1024 * 1024; // 100MB
+      const maxSize = 100 * 1024 * 1024;
       if (file.size > maxSize) {
         alert("File is too large. Maximum size is 100MB.");
         e.target.value = "";
@@ -859,7 +983,6 @@
         formData.append("file", file);
         formData.append("upload_preset", CLOUDINARY_PRESET);
 
-        // Simulate progress since fetch doesn't support it
         let fakeProgress = 0;
         const fakeInterval = setInterval(() => {
           fakeProgress = Math.min(fakeProgress + 8, 85);
@@ -874,18 +997,15 @@
 
         if (data.error) throw new Error(data.error.message);
 
-        const type = getFileType(file.type);
-
         await db.ref("messages/" + currentRoom).push({
           sender:    username,
-          type:      type,
+          type:      getFileType(file.type),
           fileName:  file.name,
           fileUrl:   data.secure_url,
           timestamp: Date.now()
         });
 
       } catch (err) {
-        console.error(err);
         alert("Upload failed: " + err.message);
       } finally {
         progressBar.style.display = "none";
@@ -902,11 +1022,11 @@
 
     function getFileIcon(fileName) {
       const ext = fileName.split(".").pop().toLowerCase();
-      if (ext === "pdf")                       return "📄";
-      if (["doc","docx"].includes(ext))        return "📝";
-      if (["xls","xlsx"].includes(ext))        return "📊";
-      if (["zip","rar","7z"].includes(ext))    return "🗜️";
-      if (["txt","md"].includes(ext))          return "📃";
+      if (ext === "pdf")                    return "📄";
+      if (["doc","docx"].includes(ext))     return "📝";
+      if (["xls","xlsx"].includes(ext))     return "📊";
+      if (["zip","rar","7z"].includes(ext)) return "🗜️";
+      if (["txt","md"].includes(ext))       return "📃";
       return "📎";
     }
 
@@ -1104,7 +1224,6 @@
       document.getElementById("messageInput").focus();
     }
 
-    // ── Send text ─────────────────────────────────────────────────
     function sendMessage() {
       const input = document.getElementById("messageInput");
       const text  = input.value.trim();
@@ -1123,7 +1242,6 @@
       if (e.key === "Enter") sendMessage();
     });
 
-    // ── Render message ────────────────────────────────────────────
     function renderMessage(data, key) {
       const messages = document.getElementById("messages");
       const isSent   = data.sender === username;
@@ -1157,13 +1275,11 @@
           img.alt = data.fileName;
           img.addEventListener("click", () => openLightbox(data.fileUrl));
           bubble.appendChild(img);
-
         } else if (type === "video") {
           const video = document.createElement("video");
           video.src      = data.fileUrl;
           video.controls = true;
           bubble.appendChild(video);
-
         } else {
           const link = document.createElement("a");
           link.href      = data.fileUrl;
@@ -1172,7 +1288,7 @@
           link.innerHTML = `
             <span class="file-icon">${getFileIcon(data.fileName)}</span>
             <span class="file-name">${data.fileName}</span>
-            <span class="file-download">⬇</span>
+            <span>⬇</span>
           `;
           bubble.appendChild(link);
         }
