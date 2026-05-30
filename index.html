@@ -145,7 +145,7 @@
 
     #sidebarHeader h2 { font-size: 18px; font-weight: 700; color: #3b82f6; }
 
-    #logoutBtn, #changePassBtn {
+    #logoutBtn {
       background: transparent;
       border: 1px solid #1e3a6e;
       border-radius: 8px;
@@ -155,7 +155,7 @@
       cursor: pointer;
     }
 
-    #logoutBtn:hover, #changePassBtn:hover { border-color: #3b82f6; color: #3b82f6; }
+    #logoutBtn:hover { border-color: #3b82f6; color: #3b82f6; }
 
     #currentUserLabel {
       padding: 8px 16px 12px;
@@ -477,71 +477,6 @@
       object-fit: contain;
     }
 
-    #changePassOverlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 40;
-    }
-
-    #changePassBox {
-      background: #0d1b3e;
-      border-radius: 16px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      width: 320px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
-    }
-
-    #changePassBox h2 { color: #3b82f6; font-size: 20px; }
-
-    #changePassBox input {
-      border: none;
-      border-radius: 10px;
-      padding: 12px 16px;
-      background: #162447;
-      color: #e2e2e2;
-      font-size: 15px;
-      outline: none;
-      width: 100%;
-    }
-
-    #changePassBox input::placeholder { color: #666; }
-
-    #changePassBox button.primary {
-      background: #2563eb;
-      border: none;
-      border-radius: 10px;
-      padding: 12px;
-      color: white;
-      font-size: 15px;
-      cursor: pointer;
-      font-weight: 600;
-      width: 100%;
-    }
-
-    #changePassBox button.primary:hover { background: #1d4ed8; }
-
-    #changePassBox button.secondary {
-      background: transparent;
-      border: 1px solid #1e3a6e;
-      border-radius: 10px;
-      padding: 10px;
-      color: #aaa;
-      font-size: 13px;
-      cursor: pointer;
-      width: 100%;
-    }
-
-    #changePassBox button.secondary:hover { border-color: #3b82f6; color: #3b82f6; }
-    #changePassError   { color: #f87171; font-size: 13px; text-align: center; min-height: 18px; }
-    #changePassSuccess { color: #4caf50; font-size: 13px; text-align: center; min-height: 18px; }
-
     #adminPanel {
       position: fixed;
       inset: 0;
@@ -648,19 +583,6 @@
     <img id="lightboxImg" src="" alt="Full size" />
   </div>
 
-  <div id="changePassOverlay">
-    <div id="changePassBox">
-      <h2>🔑 Change Password</h2>
-      <input type="password" id="currentPass" placeholder="Current password..." />
-      <input type="password" id="newPass"     placeholder="New password..." />
-      <input type="password" id="confirmPass" placeholder="Confirm new password..." />
-      <div id="changePassError"></div>
-      <div id="changePassSuccess"></div>
-      <button class="primary"   id="confirmChangeBtn">Change Password</button>
-      <button class="secondary" id="cancelChangeBtn">Cancel</button>
-    </div>
-  </div>
-
   <div id="adminPanel">
     <div id="adminBox">
       <h2>👑 Admin Panel</h2>
@@ -683,7 +605,6 @@
   <div id="sidebar">
     <div id="sidebarHeader">
       <h2>💬 Rooms</h2>
-      <button id="changePassBtn">🔑</button>
       <button id="logoutBtn">Log out</button>
     </div>
     <div id="currentUserLabel">Signed in as <span id="currentUserSpan"></span></div>
@@ -757,6 +678,7 @@
     let msgListener    = null;
     let onlineListener = null;
 
+    // ── Auth ──────────────────────────────────────────────────────
     auth.onAuthStateChanged(user => {
       if (user) {
         db.ref("users/" + user.uid + "/name").once("value", snap => {
@@ -776,6 +698,7 @@
       }
     });
 
+    // ── Login ─────────────────────────────────────────────────────
     function showLoginScreen() {
       document.getElementById("authScreen").style.display = "flex";
       const box = document.getElementById("authBox");
@@ -783,9 +706,10 @@
         <h2>💬 Welcome Back</h2>
         <p>Select your account or create a new one</p>
         <div id="userList"></div>
-        <div id="authError"></div>
+        <div id="authError" style="color:#f87171;font-size:13px;text-align:center;min-height:18px;"></div>
         <div id="passwordSection" style="display:none; flex-direction:column; gap:10px;">
           <input type="password" id="loginPassword" placeholder="Enter your password..." />
+          <div id="loginError" style="color:#f87171;font-size:13px;text-align:center;min-height:18px;"></div>
           <button class="primary" id="loginConfirmBtn">Sign In</button>
           <button class="secondary" id="backBtn">← Back</button>
         </div>
@@ -824,18 +748,28 @@
       selectedEmail = email;
       document.querySelectorAll(".user-btn").forEach(b => b.classList.remove("selected"));
       btnEl.classList.add("selected");
+
       const section = document.getElementById("passwordSection");
       section.style.display = "flex";
       document.getElementById("goRegisterBtn").style.display = "none";
-      document.getElementById("authError").textContent = "";
+      document.getElementById("authError").textContent  = "";
+      document.getElementById("loginError").textContent = "";
+      document.getElementById("loginPassword").value    = "";
       document.getElementById("loginPassword").focus();
-      document.getElementById("loginConfirmBtn").onclick = () => signIn(email);
+
+      const oldBtn = document.getElementById("loginConfirmBtn");
+      const newBtn = oldBtn.cloneNode(true);
+      oldBtn.parentNode.replaceChild(newBtn, oldBtn);
+      newBtn.addEventListener("click", () => signIn(email));
+
       document.getElementById("backBtn").onclick = () => {
         section.style.display = "none";
         document.getElementById("goRegisterBtn").style.display = "block";
-        document.getElementById("authError").textContent = "";
+        document.getElementById("authError").textContent  = "";
+        document.getElementById("loginError").textContent = "";
         document.querySelectorAll(".user-btn").forEach(b => b.classList.remove("selected"));
       };
+
       document.getElementById("loginPassword").onkeydown = e => {
         if (e.key === "Enter") signIn(email);
       };
@@ -843,13 +777,32 @@
 
     function signIn(email) {
       const password = document.getElementById("loginPassword").value;
-      if (!password) return;
+      const errEl    = document.getElementById("loginError");
+
+      if (!password) {
+        errEl.textContent = "Please enter your password.";
+        return;
+      }
+
+      const btn = document.getElementById("loginConfirmBtn");
+      btn.textContent = "Signing in...";
+      btn.disabled    = true;
+
       auth.signInWithEmailAndPassword(email, password)
-        .catch(() => {
-          document.getElementById("authError").textContent = "Incorrect password. Please try again.";
+        .catch(err => {
+          btn.textContent = "Sign In";
+          btn.disabled    = false;
+          if (err.code === "auth/wrong-password" || err.code === "auth/invalid-credential") {
+            errEl.textContent = "Incorrect password. Please try again.";
+          } else if (err.code === "auth/too-many-requests") {
+            errEl.textContent = "Too many attempts. Please wait a moment.";
+          } else {
+            errEl.textContent = "Sign in failed. Please try again.";
+          }
         });
     }
 
+    // ── Register ──────────────────────────────────────────────────
     function showRegisterScreen() {
       const box = document.getElementById("authBox");
       box.innerHTML = `
@@ -890,56 +843,13 @@
         });
     }
 
+    // ── Logout ────────────────────────────────────────────────────
     document.getElementById("logoutBtn").addEventListener("click", () => {
       if (presenceRef) presenceRef.remove();
       auth.signOut();
     });
 
-    document.getElementById("changePassBtn").addEventListener("click", () => {
-      document.getElementById("changePassOverlay").style.display = "flex";
-      document.getElementById("currentPass").value  = "";
-      document.getElementById("newPass").value      = "";
-      document.getElementById("confirmPass").value  = "";
-      document.getElementById("changePassError").textContent   = "";
-      document.getElementById("changePassSuccess").textContent = "";
-      document.getElementById("currentPass").focus();
-    });
-
-    document.getElementById("cancelChangeBtn").addEventListener("click", () => {
-      document.getElementById("changePassOverlay").style.display = "none";
-    });
-
-    document.getElementById("confirmChangeBtn").addEventListener("click", () => {
-      const current = document.getElementById("currentPass").value;
-      const newPass  = document.getElementById("newPass").value;
-      const confirm  = document.getElementById("confirmPass").value;
-      const errEl    = document.getElementById("changePassError");
-      const sucEl    = document.getElementById("changePassSuccess");
-      errEl.textContent = "";
-      sucEl.textContent = "";
-      if (!current)           return errEl.textContent = "Please enter your current password.";
-      if (newPass.length < 6) return errEl.textContent = "New password must be at least 6 characters.";
-      if (newPass !== confirm) return errEl.textContent = "Passwords do not match.";
-      const user       = auth.currentUser;
-      const credential = firebase.auth.EmailAuthProvider.credential(user.email, current);
-      user.reauthenticateWithCredential(credential)
-        .then(() => user.updatePassword(newPass))
-        .then(() => {
-          sucEl.textContent = "Password changed successfully.";
-          setTimeout(() => {
-            document.getElementById("changePassOverlay").style.display = "none";
-          }, 1500);
-        })
-        .catch(err => {
-          errEl.textContent = err.code === "auth/wrong-password"
-            ? "Current password is incorrect." : err.message;
-        });
-    });
-
-    document.getElementById("confirmPass").addEventListener("keydown", e => {
-      if (e.key === "Enter") document.getElementById("confirmChangeBtn").click();
-    });
-
+    // ── Lightbox ──────────────────────────────────────────────────
     const lightbox = document.getElementById("lightbox");
     lightbox.addEventListener("click", () => lightbox.style.display = "none");
     function openLightbox(src) {
@@ -947,6 +857,7 @@
       lightbox.style.display = "flex";
     }
 
+    // ── File upload via Cloudinary ────────────────────────────────
     document.getElementById("fileBtn").addEventListener("click", () => {
       document.getElementById("fileInput").click();
     });
@@ -1012,6 +923,7 @@
       return "📎";
     }
 
+    // ── Admin panel ───────────────────────────────────────────────
     document.getElementById("adminPanelBtn").addEventListener("click", openAdminPanel);
     document.getElementById("closeAdminBtn").addEventListener("click", () => {
       document.getElementById("adminPanel").style.display = "none";
@@ -1123,6 +1035,7 @@
       document.getElementById("roomTitle").textContent = "Select a room";
     }
 
+    // ── Rooms ─────────────────────────────────────────────────────
     function initRooms() {
       const list = document.getElementById("roomList");
       list.innerHTML = "";
